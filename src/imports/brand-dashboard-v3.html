@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brand Dashboard v3 — Relaxed & Refresh</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e0e0f;--surface:#161618;--surface2:#1c1c1f;--surface3:#222226;
+  --border:rgba(255,255,255,0.07);--border-h:rgba(255,255,255,0.13);
+  --text:#f0ede8;--muted:#7a7875;--faint:#3a3a3d;
+  --accent:#e8c4a0;--accent2:#c9a47e;
+  --rose:#d4748a;--teal:#6bb8a8;--amber:#d4a857;--green:#7ab87a;
+  --red:#c96060;--purple:#9b8bd4;--blue:#6a9fd4;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");pointer-events:none;z-index:0;opacity:.5}
+.layout{display:grid;grid-template-columns:230px 1fr;min-height:100vh;position:relative;z-index:1}
+
+/* ── SIDEBAR ── */
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:24px 0 20px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.brand-mark{padding:0 20px 20px;border-bottom:1px solid var(--border);margin-bottom:6px}
+.logo-word{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;color:var(--accent);letter-spacing:.4px;line-height:1.2}
+.logo-sub{font-size:9px;color:var(--muted);letter-spacing:1.8px;text-transform:uppercase;margin-top:2px}
+.nav-section{padding:10px 0 2px}
+.nav-label{font-size:9px;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);padding:6px 20px 5px;opacity:.5}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 20px;font-size:12.5px;color:var(--muted);cursor:pointer;transition:all .15s;border-left:2px solid transparent;user-select:none}
+.nav-item:hover{color:var(--text);background:rgba(255,255,255,0.025)}
+.nav-item.active{color:var(--accent);border-left-color:var(--accent);background:rgba(232,196,160,0.055);font-weight:500}
+.nav-icon{font-size:12px;width:14px;opacity:.65;flex-shrink:0}
+.nbadge{margin-left:auto;font-size:9px;font-weight:500;padding:1px 6px;border-radius:20px}
+.nb-red{background:rgba(201,96,96,.18);color:var(--red)}
+.nb-amber{background:rgba(212,168,87,.18);color:var(--amber)}
+.nb-teal{background:rgba(107,184,168,.15);color:var(--teal)}
+.nb-blue{background:rgba(106,159,212,.15);color:var(--blue)}
+
+.commission-badge{margin:auto 14px 0;padding:14px;background:rgba(122,184,122,0.08);border-radius:10px;border:1px solid rgba(122,184,122,0.2)}
+.cb-title{font-size:11.5px;font-weight:500;color:var(--green);margin-bottom:5px;display:flex;align-items:center;gap:5px}
+.cb-desc{font-size:10px;color:var(--muted);line-height:1.4}
+.cb-link{font-size:9.5px;color:var(--text);text-decoration:underline;margin-top:8px;display:inline-block;opacity:.8}
+.cb-link:hover{opacity:1}
+
+/* ── MAIN ── */
+.main{padding:28px 34px;overflow-y:auto}
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.fade{animation:fu .35s ease both}
+.fade-1{animation:fu .35s .05s ease both}
+.fade-2{animation:fu .35s .1s ease both}
+.fade-3{animation:fu .35s .15s ease both}
+.fade-4{animation:fu .35s .2s ease both}
+
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px}
+.page-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:500;letter-spacing:-.4px;line-height:1}
+.page-title span{color:var(--accent);font-style:italic}
+.page-sub{font-size:12px;color:var(--muted);margin-top:5px}
+.hdr-actions{display:flex;gap:9px;align-items:center}
+.btn{font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;padding:7px 15px;border-radius:8px;cursor:pointer;border:none;transition:all .15s;letter-spacing:.15px}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+.btn-ghost:hover{border-color:var(--border-h);color:var(--text)}
+.btn-primary{background:var(--accent);color:#1a1208}
+.btn-primary:hover{background:var(--accent2)}
+.btn-sm{padding:4px 9px;font-size:10px;border-radius:5px}
+.btn-danger{background:rgba(201,96,96,.12);color:var(--red);border:1px solid rgba(201,96,96,.2)}
+.btn-danger:hover{background:rgba(201,96,96,.2)}
+.btn-teal{background:rgba(107,184,168,.12);color:var(--teal);border:1px solid rgba(107,184,168,.2)}
+.btn-teal:hover{background:rgba(107,184,168,.2)}
+.btn-amber{background:rgba(212,168,87,.12);color:var(--amber);border:1px solid rgba(212,168,87,.2)}
+
+/* ── ACTION REQUIRED ── */
+.action-bar{background:linear-gradient(135deg,rgba(201,96,96,.07) 0%,rgba(212,168,87,.05) 100%);border:1px solid rgba(201,96,96,.18);border-radius:13px;padding:16px 20px;margin-bottom:20px;display:flex;flex-direction:column;gap:10px}
+.action-bar-header{display:flex;align-items:center;justify-content:space-between}
+.action-bar-title{font-size:11px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;color:var(--red);opacity:.9}
+.action-bar-count{font-size:11px;color:var(--muted)}
+.action-items{display:flex;flex-direction:column;gap:7px}
+.action-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:9px;border:1px solid var(--border);background:var(--surface);transition:border-color .15s;cursor:pointer}
+.action-item:hover{border-color:var(--border-h)}
+.action-item.critical{border-left:2px solid var(--red);border-radius:0 9px 9px 0}
+.action-item.warning{border-left:2px solid var(--amber);border-radius:0 9px 9px 0}
+.action-item.info{border-left:2px solid var(--blue);border-radius:0 9px 9px 0}
+.ai-icon{font-size:16px;flex-shrink:0;width:22px;text-align:center}
+.ai-body{flex:1}
+.ai-text{font-size:12px;font-weight:500;color:var(--text);line-height:1.3}
+.ai-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.ai-cta{font-size:11px;font-weight:500;padding:4px 11px;border-radius:6px;cursor:pointer;border:none;flex-shrink:0;transition:all .15s}
+.ai-cta.red{background:rgba(201,96,96,.15);color:var(--red);border:1px solid rgba(201,96,96,.25)}
+.ai-cta.red:hover{background:rgba(201,96,96,.25)}
+.ai-cta.amber{background:rgba(212,168,87,.13);color:var(--amber);border:1px solid rgba(212,168,87,.22)}
+.ai-cta.blue{background:rgba(106,159,212,.12);color:var(--blue);border:1px solid rgba(106,159,212,.2)}
+.ai-countdown{font-size:10px;font-weight:500;padding:2px 7px;border-radius:20px;background:rgba(201,96,96,.15);color:var(--red);flex-shrink:0}
+
+/* ── KPI STRIP ── */
+.kpi-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:18px}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;transition:border-color .18s}
+.kpi-card:hover{border-color:var(--border-h)}
+.kpi-label{font-size:10.5px;color:var(--muted);letter-spacing:.3px;margin-bottom:8px}
+.kpi-value{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:500;line-height:1;color:var(--text)}
+.kpi-delta{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:500;margin-top:5px;padding:2px 7px;border-radius:20px}
+.kpi-delta.up{background:rgba(122,184,122,.11);color:var(--green)}
+.kpi-delta.dn{background:rgba(201,96,96,.11);color:var(--red)}
+.kpi-spark{margin-top:10px;height:30px}
+.sparkline path{fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+
+/* ── GRID LAYOUTS ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:16px}
+.g3{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:15px;margin-bottom:16px}
+.g31{display:grid;grid-template-columns:1fr 1.6fr;gap:15px;margin-bottom:16px}
+
+/* ── CARD ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:20px 22px;transition:border-color .18s}
+.card:hover{border-color:var(--border-h)}
+.card-title{font-size:10.5px;font-weight:500;color:var(--muted);letter-spacing:.6px;text-transform:uppercase;margin-bottom:15px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.card-title-link{font-size:11px;color:var(--accent);text-transform:none;letter-spacing:0;cursor:pointer;opacity:.8;flex-shrink:0}
+.card-title-link:hover{opacity:1}
+.sec-title{font-size:10px;font-weight:500;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);opacity:.6;margin:14px 0 8px}
+
+/* ── AKHTAR BANNER ── */
+.akhtar-banner{background:linear-gradient(135deg,rgba(232,196,160,.07) 0%,rgba(155,139,212,.05) 100%);border:1px solid rgba(232,196,160,.14);border-radius:13px;padding:18px 22px;display:flex;align-items:center;gap:18px;margin-bottom:18px}
+.akhtar-icon{width:40px;height:40px;border-radius:10px;background:rgba(232,196,160,.1);border:1px solid rgba(232,196,160,.18);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.akhtar-text h3{font-size:12.5px;font-weight:500;color:var(--accent);margin-bottom:2px}
+.akhtar-text p{font-size:11.5px;color:var(--muted);line-height:1.4}
+.akhtar-stats{margin-left:auto;display:flex;gap:22px;flex-shrink:0}
+.as-val{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;color:var(--text);line-height:1}
+.as-lbl{font-size:10px;color:var(--muted);margin-top:1px}
+
+/* ── PRODUCT LIST ── */
+.product-row{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--border);transition:all .13s;cursor:default}
+.product-row:last-child{border-bottom:none}
+.product-row:hover{background:rgba(255,255,255,.02);margin:0 -6px;padding:9px 6px;border-radius:6px;border-bottom-color:transparent}
+.product-rank{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--muted);width:20px;text-align:center;opacity:.38}
+.product-swatch{width:30px;height:30px;border-radius:7px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px}
+.product-name{font-size:12px;font-weight:500;color:var(--text)}
+.product-cat{font-size:10.5px;color:var(--muted);margin-top:1px}
+.pbar-wrap{width:54px}
+.pbar-track{height:3px;background:var(--surface2);border-radius:2px;overflow:hidden}
+.pbar-fill{height:100%;border-radius:2px;transition:width 1s ease}
+.p-rev{font-size:12.5px;font-weight:500;color:var(--text);text-align:right}
+.p-units{font-size:10.5px;color:var(--muted);margin-top:1px;text-align:right}
+
+/* ── STATUS DONUT ── */
+.status-row{display:flex;align-items:center;gap:9px;margin-bottom:7px}
+.status-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.status-name{font-size:12px;color:var(--text);flex:1}
+.status-count{font-size:12px;font-weight:500;color:var(--text)}
+.status-pct{font-size:10.5px;color:var(--muted);width:32px;text-align:right}
+
+/* ── SLA ── */
+.sla-row{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.sla-name{font-size:11.5px;color:var(--text);width:88px;flex-shrink:0}
+.sla-track{flex:1;height:4px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden}
+.sla-fill{height:100%;border-radius:2px}
+.sla-val{font-size:11px;font-weight:500;width:34px;text-align:right}
+
+/* ── PAYOUT ── */
+.payout-amount{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:500;line-height:1;color:var(--text)}
+.pb-row{display:flex;align-items:center;justify-content:space-between;font-size:11.5px;margin-bottom:5px}
+.pb-label{color:var(--muted)}
+.pb-label[title]{border-bottom:1px dotted var(--muted);cursor:help}
+.pb-val{font-weight:500;color:var(--text)}
+.pb-val.neg{color:var(--red)}
+.pb-val.hold{color:var(--amber)}
+.pb-val.pos{color:var(--teal)}
+.pb-divider{border:none;border-top:1px solid var(--border);margin:6px 0}
+.payout-date{margin-top:12px;padding:9px 11px;background:var(--surface2);border-radius:7px;font-size:11px;color:var(--muted)}
+.payout-date strong{color:var(--teal);font-weight:500}
+
+/* ── INVENTORY ── */
+.inv-table{width:100%;border-collapse:collapse}
+.inv-table th{text-align:left;font-size:9.5px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);padding:0 0 10px;border-bottom:1px solid var(--border);opacity:.65}
+.inv-table td{padding:9px 0;border-bottom:1px solid var(--border);font-size:11.5px;color:var(--text)}
+.inv-table tr:last-child td{border-bottom:none}
+.stock-pill{display:inline-block;font-size:9.5px;font-weight:500;padding:2px 7px;border-radius:20px}
+.sp-good{background:rgba(122,184,122,.11);color:var(--green)}
+.sp-low{background:rgba(212,168,87,.11);color:var(--amber)}
+.sp-out{background:rgba(201,96,96,.11);color:var(--red)}
+.sp-transit{background:rgba(106,159,212,.11);color:var(--blue)}
+.sp-pending{background:rgba(155,139,212,.11);color:var(--purple)}
+
+/* ── FINANCIAL LEAKAGE ── */
+.leak-chart{display:flex;flex-direction:column;gap:9px;margin-top:4px}
+.leak-row{display:flex;align-items:center;gap:10px}
+.leak-label{font-size:11.5px;color:var(--text);width:120px;flex-shrink:0}
+.leak-track{flex:1;height:22px;background:var(--surface2);border-radius:5px;overflow:hidden;position:relative}
+.leak-fill{height:100%;border-radius:5px;display:flex;align-items:center;padding-left:8px;font-size:10.5px;font-weight:500;color:rgba(255,255,255,.7);transition:width .9s ease}
+.leak-total{font-size:11.5px;font-weight:500;color:var(--text);display:flex;align-items:center;justify-content:flex-end;gap:6px;min-width:52px;flex-shrink:0}
+.leak-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.leak-stat{padding:9px 12px;background:var(--surface2);border-radius:8px;border:1px solid var(--border)}
+.leak-stat-val{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:500;color:var(--text)}
+.leak-stat-lbl{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.3}
+
+/* ── PROMOTIONS ── */
+.promo-list{display:flex;flex-direction:column;gap:8px}
+.promo-item{display:flex;align-items:center;gap:11px;padding:10px 13px;background:var(--surface2);border-radius:9px;border:1px solid var(--border);transition:border-color .15s}
+.promo-item:hover{border-color:var(--border-h)}
+.promo-type-pill{font-size:9.5px;font-weight:500;padding:2px 8px;border-radius:20px;flex-shrink:0}
+.pt-platform{background:rgba(155,139,212,.13);color:var(--purple)}
+.pt-brand{background:rgba(107,184,168,.12);color:var(--teal)}
+.pt-expiry{background:rgba(212,168,87,.11);color:var(--amber)}
+.promo-name{font-size:12px;font-weight:500;color:var(--text);flex:1}
+.promo-sub{font-size:10.5px;color:var(--muted);margin-top:1px}
+.promo-stat{text-align:right;flex-shrink:0}
+.promo-stat-val{font-size:12px;font-weight:500;color:var(--text)}
+.promo-stat-lbl{font-size:10px;color:var(--muted);margin-top:1px}
+.promo-toggle{width:32px;height:18px;border-radius:9px;position:relative;cursor:pointer;flex-shrink:0;transition:background .2s}
+.pt-on{background:var(--teal)}
+.pt-off{background:var(--faint)}
+.pt-thumb{position:absolute;top:2px;width:14px;height:14px;background:#fff;border-radius:50%;transition:left .2s}
+.pt-on .pt-thumb{left:16px}
+.pt-off .pt-thumb{left:2px}
+
+/* ── CHART BAR ── */
+.chart-wrap{position:relative;height:150px}
+.chart-bars{display:flex;align-items:flex-end;gap:5px;height:100%;padding-top:8px}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.bar-track{width:100%;flex:1;display:flex;flex-direction:column;justify-content:flex-end;border-radius:3px 3px 0 0;overflow:hidden}
+.bar-fill{width:100%;border-radius:3px 3px 0 0;position:relative}
+.bar-fill::after{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(to top,rgba(255,255,255,0) 60%,rgba(255,255,255,.07) 100%)}
+.bar-label{font-size:9px;color:var(--muted);letter-spacing:.2px;margin-top:2px}
+.chart-legend{display:flex;gap:14px;margin-top:12px}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
+.legend-dot{width:7px;height:7px;border-radius:2px}
+
+/* ── CONCERN ── */
+.concern-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.concern-item{padding:11px 13px;background:var(--surface2);border-radius:9px;border:1px solid var(--border)}
+.concern-name{font-size:11.5px;font-weight:500;color:var(--text);margin-bottom:5px}
+.cbar-track{height:3px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;margin-bottom:4px}
+.cbar-fill{height:100%;border-radius:2px}
+.concern-pct{font-size:10.5px;color:var(--muted)}
+
+/* ── REVIEWS ── */
+.review-list{display:flex;flex-direction:column;gap:10px}
+.review-item{padding:12px 14px;background:var(--surface2);border-radius:10px;border:1px solid var(--border)}
+.review-header{display:flex;align-items:center;gap:10px;margin-bottom:6px}
+.review-stars{display:flex;gap:2px}
+.rstar{font-size:11px}
+.rstar.filled{color:var(--amber)}
+.rstar.empty{color:var(--faint)}
+.review-prod{font-size:10.5px;color:var(--muted);flex:1}
+.review-date{font-size:10px;color:var(--muted)}
+.review-text{font-size:12px;color:var(--text);line-height:1.5;margin-bottom:6px}
+.review-user{font-size:10.5px;color:var(--muted)}
+.review-tag{display:inline-block;font-size:9.5px;font-weight:500;padding:2px 7px;border-radius:20px;margin-top:5px}
+.rt-resolved{background:rgba(122,184,122,.11);color:var(--green)}
+.rt-pending{background:rgba(212,168,87,.11);color:var(--amber)}
+.rt-critical{background:rgba(201,96,96,.11);color:var(--red)}
+.reply-box{margin-top:8px;padding:8px 10px;background:var(--surface);border-radius:7px;border:1px solid var(--border)}
+.reply-box-input{width:100%;background:none;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:11.5px;outline:none;resize:none}
+.reply-box-input::placeholder{color:var(--faint)}
+.reply-actions{display:flex;justify-content:flex-end;gap:6px;margin-top:6px}
+
+/* ── STOREFRONT ── */
+.storefront-preview{border-radius:10px;overflow:hidden;border:1px solid var(--border);margin-bottom:14px}
+.sf-hero{height:70px;background:linear-gradient(135deg,rgba(107,184,168,.2),rgba(155,139,212,.15));display:flex;align-items:center;justify-content:center;position:relative}
+.sf-hero-text{font-family:'Cormorant Garamond',serif;font-size:13px;color:var(--accent);opacity:.5;letter-spacing:1px}
+.sf-hero-edit{position:absolute;top:6px;right:8px;font-size:10px;padding:3px 9px;border-radius:20px;background:rgba(0,0,0,.4);color:var(--muted);cursor:pointer;border:1px solid var(--border)}
+.sf-logo-row{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--surface2)}
+.sf-logo{width:38px;height:38px;border-radius:8px;background:rgba(232,196,160,.12);border:1px solid rgba(232,196,160,.18);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--accent)}
+.sf-brand-name{font-size:13px;font-weight:500;color:var(--text)}
+.sf-brand-sub{font-size:11px;color:var(--muted);margin-top:1px}
+.cert-list{display:flex;gap:7px;flex-wrap:wrap;margin-top:2px}
+.cert-badge{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:500;padding:3px 9px;border-radius:20px;background:rgba(122,184,122,.1);color:var(--green);border:1px solid rgba(122,184,122,.15)}
+.sf-field{margin-bottom:12px}
+.sf-field label{display:block;font-size:10px;font-weight:500;color:var(--muted);letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px}
+.sf-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:8px 11px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;outline:none;transition:border-color .15s}
+.sf-input:focus{border-color:var(--border-h)}
+.sf-textarea{min-height:70px;resize:none}
+.sf-upload-btn{display:flex;align-items:center;justify-content:center;gap:7px;padding:9px;border-radius:8px;border:1px dashed var(--border);background:var(--surface2);color:var(--muted);font-size:11.5px;cursor:pointer;transition:all .15s;width:100%}
+.sf-upload-btn:hover{border-color:var(--border-h);color:var(--text)}
+
+/* notification dot */
+.ndot{width:6px;height:6px;background:var(--rose);border-radius:50%;display:inline-block;margin-left:3px;vertical-align:middle;flex-shrink:0}
+
+/* ═══════════════════════════════
+   ── NEW: ORDERS VIEW ──
+═══════════════════════════════ */
+.orders-toolbar{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.search-box{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:7px 12px;flex:1;min-width:200px;transition:border-color .15s}
+.search-box:focus-within{border-color:var(--border-h)}
+.search-box input{background:none;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--text);width:100%}
+.search-box input::placeholder{color:var(--muted)}
+.search-icon{color:var(--muted);font-size:13px;flex-shrink:0}
+.filter-tabs{display:flex;gap:5px}
+.ftab{font-size:11px;font-weight:500;padding:5px 12px;border-radius:7px;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted);transition:all .15s;white-space:nowrap}
+.ftab:hover{color:var(--text);border-color:var(--border-h)}
+.ftab.active{background:rgba(232,196,160,.08);border-color:rgba(232,196,160,.25);color:var(--accent)}
+
+.orders-table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:13px;overflow:hidden;margin-bottom:16px}
+.orders-table{width:100%;border-collapse:collapse}
+.orders-table th{text-align:left;font-size:9.5px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);padding:12px 16px;border-bottom:1px solid var(--border);opacity:.7;background:var(--surface2)}
+.orders-table td{padding:11px 16px;border-bottom:1px solid var(--border);font-size:12px;color:var(--text);vertical-align:middle}
+.orders-table tr:last-child td{border-bottom:none}
+.orders-table tr:hover td{background:rgba(255,255,255,.015)}
+.order-id{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--accent);font-weight:500}
+.order-id-sub{font-size:10px;color:var(--muted);margin-top:1px}
+.order-customer{font-size:12px;font-weight:500;color:var(--text)}
+.order-city{font-size:10.5px;color:var(--muted);margin-top:1px}
+.order-prod-name{font-size:11.5px;color:var(--text)}
+.order-prod-sku{font-size:10px;color:var(--muted);margin-top:1px}
+.order-amount{font-size:13px;font-weight:500;font-family:'Cormorant Garamond',serif;color:var(--text)}
+.order-type{font-size:10px;color:var(--muted);margin-top:1px}
+.order-sla-ok{font-size:10.5px;color:var(--green)}
+.order-sla-warn{font-size:10.5px;color:var(--amber);font-weight:500}
+.order-sla-breach{font-size:10.5px;color:var(--red);font-weight:500;animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.order-actions{display:flex;gap:5px}
+
+.urgency-bar{background:rgba(201,96,96,.07);border:1px solid rgba(201,96,96,.15);border-radius:10px;padding:12px 16px;margin-bottom:14px;display:flex;align-items:center;gap:14px}
+.urgency-icon{font-size:18px}
+.urgency-text{flex:1;font-size:12px;color:var(--red)}
+.urgency-text strong{font-weight:500}
+.urgency-timer{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;color:var(--red)}
+
+.orders-kpi{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
+.okpi{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+.okpi-val{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:500;color:var(--text);line-height:1}
+.okpi-lbl{font-size:10px;color:var(--muted);margin-top:3px}
+
+/* ═══════════════════════════════
+   ── NEW: ANALYTICS VIEW ──
+═══════════════════════════════ */
+.analytics-grid-top{display:grid;grid-template-columns:2fr 1fr;gap:15px;margin-bottom:16px}
+.analytics-grid-mid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:15px;margin-bottom:16px}
+.analytics-grid-bot{display:grid;grid-template-columns:1.4fr 1fr;gap:15px;margin-bottom:16px}
+
+.period-toggle{display:flex;gap:4px;background:var(--surface2);border-radius:8px;padding:3px}
+.ptab{font-size:10.5px;font-weight:500;padding:4px 10px;border-radius:5px;cursor:pointer;color:var(--muted);transition:all .15s}
+.ptab.active{background:var(--surface);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.3)}
+
+.big-chart-wrap{height:200px;position:relative;margin-top:8px}
+.big-chart-bars{display:flex;align-items:flex-end;gap:4px;height:100%}
+.big-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.big-bar-track{width:100%;flex:1;display:flex;flex-direction:column;justify-content:flex-end}
+.big-bar-seg{width:100%;position:relative}
+.big-bar-seg::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(255,255,255,0) 60%,rgba(255,255,255,.06) 100%)}
+.big-bar-label{font-size:8.5px;color:var(--muted)}
+
+.funnel-wrap{display:flex;flex-direction:column;gap:7px;margin-top:6px}
+.funnel-row{position:relative}
+.funnel-label{font-size:11px;color:var(--text);margin-bottom:3px;display:flex;justify-content:space-between}
+.funnel-label span{color:var(--muted);font-size:10.5px}
+.funnel-bar{height:28px;border-radius:5px;display:flex;align-items:center;padding:0 10px;font-size:10.5px;font-weight:500;color:rgba(255,255,255,.8);transition:width 1s ease}
+.funnel-rate{font-size:9.5px;color:var(--muted);margin-top:2px;text-align:right}
+
+.channel-list{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.channel-row{display:flex;align-items:center;gap:10px}
+.channel-icon{width:28px;height:28px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.channel-name{font-size:12px;color:var(--text);flex:1}
+.channel-sub{font-size:10px;color:var(--muted)}
+.channel-val{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;color:var(--text)}
+.channel-delta{font-size:10px;font-weight:500}
+.cd-up{color:var(--green)}
+.cd-dn{color:var(--red)}
+
+.cohort-table{width:100%;border-collapse:collapse;margin-top:6px}
+.cohort-table th{font-size:9px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);padding:4px 8px;text-align:center;opacity:.6}
+.cohort-table td{padding:5px 8px;text-align:center;font-size:11px;border-radius:4px}
+.cohort-cell{border-radius:4px;padding:3px 6px;font-size:10.5px;font-weight:500}
+
+.geo-list{display:flex;flex-direction:column;gap:7px;margin-top:4px}
+.geo-row{display:flex;align-items:center;gap:9px}
+.geo-flag{font-size:14px;width:22px;text-align:center}
+.geo-city{font-size:12px;color:var(--text);flex:1}
+.geo-track{width:80px;height:4px;background:var(--surface2);border-radius:2px;overflow:hidden}
+.geo-fill{height:100%;border-radius:2px;background:var(--teal)}
+.geo-pct{font-size:11px;color:var(--muted);width:30px;text-align:right}
+.geo-rev{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--text);width:52px;text-align:right}
+
+.insight-cards{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.insight-card{padding:10px 13px;border-radius:9px;border:1px solid var(--border);background:var(--surface2)}
+.insight-icon{font-size:15px;margin-bottom:4px}
+.insight-title{font-size:11.5px;font-weight:500;color:var(--text);margin-bottom:2px}
+.insight-body{font-size:11px;color:var(--muted);line-height:1.4}
+.insight-card.positive{border-color:rgba(122,184,122,.2);background:rgba(122,184,122,.04)}
+.insight-card.warning{border-color:rgba(212,168,87,.2);background:rgba(212,168,87,.04)}
+.insight-card.info{border-color:rgba(106,159,212,.2);background:rgba(106,159,212,.04)}
+
+/* ═══════════════════════════════
+   ── NEW: ACTIVITY FEED ──
+═══════════════════════════════ */
+.activity-layout{display:grid;grid-template-columns:1fr 300px;gap:16px}
+.feed-filters{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.feed-pill{font-size:11px;font-weight:500;padding:5px 12px;border-radius:20px;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--muted);transition:all .15s;user-select:none}
+.feed-pill:hover{color:var(--text);border-color:var(--border-h)}
+.feed-pill.active{color:var(--accent);border-color:rgba(232,196,160,.3);background:rgba(232,196,160,.06)}
+
+.timeline{display:flex;flex-direction:column}
+.tl-group{margin-bottom:18px}
+.tl-date-label{font-size:10px;font-weight:500;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);padding:6px 0;margin-bottom:6px;border-bottom:1px solid var(--border);opacity:.5}
+.tl-item{display:flex;gap:13px;padding:10px 0;position:relative}
+.tl-item:not(:last-child)::after{content:'';position:absolute;left:15px;top:36px;bottom:0;width:1px;background:var(--border)}
+.tl-dot-wrap{flex-shrink:0;width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;border:1px solid var(--border);background:var(--surface2)}
+.tl-body{flex:1;padding-top:4px}
+.tl-title{font-size:12px;font-weight:500;color:var(--text);line-height:1.3;margin-bottom:2px}
+.tl-title em{font-style:normal;color:var(--accent)}
+.tl-meta{font-size:11px;color:var(--muted)}
+.tl-badge{display:inline-block;font-size:9.5px;font-weight:500;padding:2px 7px;border-radius:20px;margin-left:6px;vertical-align:middle}
+.tb-order{background:rgba(107,184,168,.1);color:var(--teal)}
+.tb-return{background:rgba(201,96,96,.1);color:var(--red)}
+.tb-finance{background:rgba(155,139,212,.1);color:var(--purple)}
+.tb-promo{background:rgba(212,168,87,.1);color:var(--amber)}
+.tb-review{background:rgba(122,184,122,.1);color:var(--green)}
+.tb-system{background:rgba(255,255,255,.06);color:var(--muted)}
+.tb-ai{background:rgba(232,196,160,.1);color:var(--accent)}
+.tl-expand{font-size:10.5px;color:var(--accent);cursor:pointer;margin-top:4px;display:inline-block;opacity:.7}
+.tl-expand:hover{opacity:1}
+
+.notif-panel{display:flex;flex-direction:column;gap:12px}
+.notif-section-title{font-size:9.5px;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;opacity:.6}
+.notif-card{padding:12px 14px;background:var(--surface);border:1px solid var(--border);border-radius:11px;transition:border-color .15s}
+.notif-card:hover{border-color:var(--border-h)}
+.notif-card.unread{border-left:2px solid var(--accent);border-radius:0 11px 11px 0}
+.notif-head{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.notif-icon{font-size:14px}
+.notif-title{font-size:12px;font-weight:500;color:var(--text);flex:1}
+.notif-time{font-size:10px;color:var(--muted);flex-shrink:0}
+.notif-body{font-size:11.5px;color:var(--muted);line-height:1.4}
+.notif-action{font-size:11px;color:var(--accent);cursor:pointer;margin-top:6px;display:inline-block}
+.stats-summary{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:14px}
+.ss-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--border)}
+.ss-row:last-child{border-bottom:none}
+.ss-label{font-size:11.5px;color:var(--muted)}
+.ss-val{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--text)}
+
+/* ── Rating bars (reviews page) ── */
+.rating-big{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:500;line-height:1;color:var(--text)}
+.rating-stars-row .rs{font-size:14px;color:var(--amber)}
+.rating-bars{display:flex;flex-direction:column;gap:5px}
+.rbar-row{display:flex;align-items:center;gap:7px}
+.rbar-num{font-size:11px;color:var(--muted);width:8px;text-align:right}
+.rbar-track{flex:1;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden}
+.rbar-fill{height:100%;background:var(--amber);border-radius:3px}
+.rbar-count{font-size:11px;color:var(--muted);width:26px}
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar">
+  <div class="brand-mark">
+    <div class="logo-word">Relaxed &<br>Refresh</div>
+    <div class="logo-sub">Brand Portal</div>
+  </div>
+
+  <nav class="nav-section">
+    <div class="nav-label">Overview</div>
+    <div class="nav-item active" onclick="switchView('dashboard',this)"><span class="nav-icon">◈</span>Dashboard</div>
+    <div class="nav-item" onclick="switchView('activity',this)"><span class="nav-icon">◷</span>Activity Feed<span class="nbadge nb-blue">14 new</span></div>
+  </nav>
+
+  <nav class="nav-section">
+    <div class="nav-label">Growth Engine (Ads)</div>
+    <div class="nav-item" onclick="switchView('promos',this)"><span class="nav-icon">◁</span>Campaigns</div>
+    <div class="nav-item" onclick="switchView('dashboard',this)"><span class="nav-icon">✦</span>Mishti AI Boosts</div>
+    <div class="nav-item" onclick="switchView('dashboard',this)"><span class="nav-icon">◻</span>Ad Wallet</div>
+  </nav>
+
+  <nav class="nav-section">
+    <div class="nav-label">Operations</div>
+    <div class="nav-item" onclick="switchView('orders',this)"><span class="nav-icon">◷</span>Orders<span class="nbadge nb-red">3 urgent</span></div>
+    <div class="nav-item" onclick="switchView('dashboard',this)"><span class="nav-icon">◁</span>Returns & RTO</div>
+    <div class="nav-item" onclick="switchView('dashboard',this)"><span class="nav-icon">◈</span>Inventory</div>
+  </nav>
+
+  <nav class="nav-section">
+    <div class="nav-label">Analytics</div>
+    <div class="nav-item" onclick="switchView('analytics',this)"><span class="nav-icon">◻</span>Deep Dive</div>
+    <div class="nav-item" onclick="switchView('finance',this)"><span class="nav-icon">◻</span>Payouts</div>
+    <div class="nav-item" onclick="switchView('finance',this)"><span class="nav-icon">◻</span>GST Reports</div>
+  </nav>
+
+  <nav class="nav-section" style="margin-bottom:20px">
+    <div class="nav-label">Settings</div>
+    <div class="nav-item" onclick="switchView('storefront',this)"><span class="nav-icon">◻</span>Brand Profile</div>
+    <div class="nav-item" onclick="switchView('dashboard',this)"><span class="nav-icon">◻</span>Team Access</div>
+  </nav>
+
+  <div class="commission-badge">
+    <div class="cb-title">✓ 0% Commission Tier</div>
+    <div class="cb-desc">You keep 100% of your margins. Invest your savings into Ads to grow faster!</div>
+    <a href="#" class="cb-link">How we make money →</a>
+  </div>
+</aside>
+
+<!-- ── MAIN ── -->
+<main class="main">
+
+<!-- ════════ VIEW: DASHBOARD ════════ -->
+<div id="view-dashboard">
+  <div class="page-header fade">
+    <div>
+      <div class="page-title">Brand <span>Overview</span></div>
+      <div class="page-sub">June 2025 · Lumière Botanics · Last updated 2 min ago</div>
+    </div>
+    <div class="hdr-actions">
+      <button class="btn btn-ghost">↓ Export Report</button>
+      <button class="btn btn-primary">+ Add Product</button>
+    </div>
+  </div>
+
+  <div class="action-bar fade">
+    <div class="action-bar-header">
+      <div class="action-bar-title">⚡ Action Required — 3 urgent items</div>
+      <div class="action-bar-count">Must resolve today to avoid penalties</div>
+    </div>
+    <div class="action-items">
+      <div class="action-item critical">
+        <div class="ai-icon">🚨</div>
+        <div class="ai-body">
+          <div class="ai-text">3 orders breaching 24h SLA — dispatch window closing soon</div>
+          <div class="ai-sub">#RNR-88430 · #RNR-88427 · #RNR-88419 — all require packing + label print</div>
+        </div>
+        <div class="ai-countdown">1h 48m left</div>
+        <button class="ai-cta red" onclick="switchView('orders',document.querySelector('.nav-item:nth-child(1)'))">View Orders →</button>
+      </div>
+      <div class="action-item warning">
+        <div class="ai-icon">⚠️</div>
+        <div class="ai-body">
+          <div class="ai-text">1 return dispute requires your packing video upload — deadline today</div>
+          <div class="ai-sub">Order #RNR-88304 · Vitamin C Brightening SPF · customer claims damaged</div>
+        </div>
+        <button class="ai-cta amber">Upload Proof →</button>
+      </div>
+      <div class="action-item info">
+        <div class="ai-icon">📦</div>
+        <div class="ai-body">
+          <div class="ai-text">2 products out of stock — currently hidden from Akhtar recommendations</div>
+          <div class="ai-sub">Retinol Night Repair (LB-RET-30) · Ceramide Repair Cream (LB-CER-50)</div>
+        </div>
+        <button class="ai-cta blue">Update Stock →</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="kpi-strip fade-1">
+    <div class="kpi-card">
+      <div class="kpi-label">Revenue (MTD)</div>
+      <div class="kpi-value">₹2.4L</div>
+      <span class="kpi-delta up">↑ 18.3%</span>
+      <div class="kpi-spark"><svg width="100%" height="30" viewBox="0 0 120 30"><path d="M0 26C15 20,25 24,40 16C55 8,70 12,85 6C100 0,110 4,120 2" stroke="var(--green)" fill="none" stroke-width="1.5"/></svg></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Orders Fulfilled</div>
+      <div class="kpi-value">847</div>
+      <span class="kpi-delta up">↑ 12.1%</span>
+      <div class="kpi-spark"><svg width="100%" height="30" viewBox="0 0 120 30"><path d="M0 22C20 16,35 18,55 12C70 6,90 10,120 4" stroke="var(--teal)" fill="none" stroke-width="1.5"/></svg></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Return Rate</div>
+      <div class="kpi-value">3.2%</div>
+      <span class="kpi-delta dn">↑ 0.4%</span>
+      <div class="kpi-spark"><svg width="100%" height="30" viewBox="0 0 120 30"><path d="M0 14C25 10,40 18,60 16C80 14,100 20,120 18" stroke="var(--rose)" fill="none" stroke-width="1.5"/></svg></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Avg. Dispatch</div>
+      <div class="kpi-value">14h</div>
+      <span class="kpi-delta up">↓ 3h faster</span>
+      <div class="kpi-spark"><svg width="100%" height="30" viewBox="0 0 120 30"><path d="M0 18C20 22,40 14,60 12C80 10,100 6,120 4" stroke="var(--amber)" fill="none" stroke-width="1.5"/></svg></div>
+    </div>
+  </div>
+
+  <div class="akhtar-banner fade-2">
+    <div class="akhtar-icon">✦</div>
+    <div class="akhtar-text">
+      <h3>Akhtar AI — Skin Match Insights</h3>
+      <p>Your products are matched to <strong style="color:var(--accent)">2,841 users</strong> this month. Avg CPC: <strong style="color:var(--text)">₹18.00</strong> · <a href="#" style="color:var(--accent);text-decoration:none;border-bottom:1px solid rgba(232,196,160,.4)">View Pricing Details</a></p>
+    </div>
+    <div class="akhtar-stats">
+      <div><div class="as-val">2,841</div><div class="as-lbl">AI impressions</div></div>
+      <div><div class="as-val">34%</div><div class="as-lbl">Conversion</div></div>
+      <div><div class="as-val">4.7★</div><div class="as-lbl">Avg. rating</div></div>
+    </div>
+  </div>
+
+  <div class="g3 fade-2">
+    <div class="card">
+      <div class="card-title">Monthly Revenue <span class="card-title-link" onclick="switchView('analytics',null)">Deep Dive →</span></div>
+      <div class="chart-wrap">
+        <div class="chart-bars">
+          <div class="bar-col"><div class="bar-track" style="height:78%"><div class="bar-fill" style="height:56%;background:var(--teal);opacity:.7"></div><div class="bar-fill" style="height:44%;background:rgba(107,184,168,.22)"></div></div><div class="bar-label">Jan</div></div>
+          <div class="bar-col"><div class="bar-track" style="height:62%"><div class="bar-fill" style="height:50%;background:var(--teal);opacity:.7"></div><div class="bar-fill" style="height:50%;background:rgba(107,184,168,.22)"></div></div><div class="bar-label">Feb</div></div>
+          <div class="bar-col"><div class="bar-track" style="height:74%"><div class="bar-fill" style="height:60%;background:var(--teal);opacity:.7"></div><div class="bar-fill" style="height:40%;background:rgba(107,184,168,.22)"></div></div><div class="bar-label">Mar</div></div>
+          <div class="bar-col"><div class="bar-track" style="height:83%"><div class="bar-fill" style="height:63%;background:var(--teal);opacity:.7"></div><div class="bar-fill" style="height:37%;background:rgba(107,184,168,.22)"></div></div><div class="bar-label">Apr</div></div>
+          <div class="bar-col"><div class="bar-track" style="height:70%"><div class="bar-fill" style="height:57%;background:var(--teal);opacity:.7"></div><div class="bar-fill" style="height:43%;background:rgba(107,184,168,.22)"></div></div><div class="bar-label">May</div></div>
+          <div class="bar-col"><div class="bar-track" style="height:100%;outline:1px solid rgba(232,196,160,.28);border-radius:3px"><div class="bar-fill" style="height:64%;background:var(--accent);opacity:.88"></div><div class="bar-fill" style="height:36%;background:rgba(232,196,160,.18)"></div></div><div class="bar-label" style="color:var(--accent)">Jun</div></div>
+        </div>
+      </div>
+      <div class="chart-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:var(--teal)"></div>Prepaid</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(107,184,168,.3)"></div>COD</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Top Products <span class="card-title-link">All SKUs →</span></div>
+      <div>
+        <div class="product-row"><div class="product-rank">1</div><div class="product-swatch" style="background:rgba(107,184,168,.11)">🌿</div><div style="flex:1"><div class="product-name">Niacinamide 10% Serum</div><div class="product-cat">30ml</div></div><div class="pbar-wrap"><div class="pbar-track"><div class="pbar-fill" style="width:100%;background:var(--teal)"></div></div></div><div><div class="p-rev">₹68,400</div><div class="p-units">342 u</div></div></div>
+        <div class="product-row"><div class="product-rank">2</div><div class="product-swatch" style="background:rgba(212,168,87,.11)">✦</div><div style="flex:1"><div class="product-name">Vitamin C SPF</div><div class="product-cat">50ml</div></div><div class="pbar-wrap"><div class="pbar-track"><div class="pbar-fill" style="width:78%;background:var(--amber)"></div></div></div><div><div class="p-rev">₹53,250</div><div class="p-units">213 u</div></div></div>
+        <div class="product-row"><div class="product-rank">3</div><div class="product-swatch" style="background:rgba(155,139,212,.11)">◈</div><div style="flex:1"><div class="product-name">HA Toner</div><div class="product-cat">100ml</div></div><div class="pbar-wrap"><div class="pbar-track"><div class="pbar-fill" style="width:61%;background:var(--purple)"></div></div></div><div><div class="p-rev">₹41,800</div><div class="p-units">190 u</div></div></div>
+        <div class="product-row"><div class="product-rank">4</div><div class="product-swatch" style="background:rgba(201,96,96,.11)">❋</div><div style="flex:1"><div class="product-name">Retinol Night Repair</div><div class="product-cat" style="color:var(--red)">Out of stock</div></div><div class="pbar-wrap"><div class="pbar-track"><div class="pbar-fill" style="width:44%;background:var(--rose)"></div></div></div><div><div class="p-rev">₹30,100</div><div class="p-units">86 u</div></div></div>
+        <div class="product-row"><div class="product-rank">5</div><div class="product-swatch" style="background:rgba(122,184,122,.11)">❁</div><div style="flex:1"><div class="product-name">Rose Hip Oil</div><div class="product-cat">20ml</div></div><div class="pbar-wrap"><div class="pbar-track"><div class="pbar-fill" style="width:32%;background:var(--green)"></div></div></div><div><div class="p-rev">₹22,050</div><div class="p-units">147 u</div></div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Order Status</div>
+      <svg viewBox="0 0 120 120" width="100" height="100" style="display:block;margin:0 auto 14px">
+        <circle cx="60" cy="60" r="44" fill="none" stroke="var(--surface2)" stroke-width="13"/>
+        <circle cx="60" cy="60" r="44" fill="none" stroke="var(--teal)" stroke-width="13" stroke-dasharray="143 133" stroke-dashoffset="0" transform="rotate(-90 60 60)"/>
+        <circle cx="60" cy="60" r="44" fill="none" stroke="var(--amber)" stroke-width="13" stroke-dasharray="77 199" stroke-dashoffset="-143" transform="rotate(-90 60 60)"/>
+        <circle cx="60" cy="60" r="44" fill="none" stroke="var(--green)" stroke-width="13" stroke-dasharray="33 243" stroke-dashoffset="-220" transform="rotate(-90 60 60)"/>
+        <circle cx="60" cy="60" r="44" fill="none" stroke="var(--rose)" stroke-width="13" stroke-dasharray="22 254" stroke-dashoffset="-253" transform="rotate(-90 60 60)"/>
+        <text x="60" y="55" text-anchor="middle" fill="var(--text)" font-family="Cormorant Garamond,serif" font-size="19" font-weight="500">847</text>
+        <text x="60" y="67" text-anchor="middle" fill="var(--muted)" font-family="DM Sans,sans-serif" font-size="8">orders</text>
+      </svg>
+      <div class="status-row"><div class="status-dot" style="background:var(--teal)"></div><div class="status-name">Confirmed</div><div class="status-count">440</div><div class="status-pct">52%</div></div>
+      <div class="status-row"><div class="status-dot" style="background:var(--amber)"></div><div class="status-name">In transit</div><div class="status-count">237</div><div class="status-pct">28%</div></div>
+      <div class="status-row"><div class="status-dot" style="background:var(--green)"></div><div class="status-name">Delivered</div><div class="status-count">102</div><div class="status-pct">12%</div></div>
+      <div class="status-row"><div class="status-dot" style="background:var(--rose)"></div><div class="status-name">Pending COD</div><div class="status-count">68</div><div class="status-pct">8%</div></div>
+    </div>
+  </div>
+
+  <div class="g3 fade-3">
+    <div class="card">
+      <div class="card-title">Akhtar — Skin Concern Match</div>
+      <div class="concern-grid">
+        <div class="concern-item"><div class="concern-name">Acne-prone</div><div class="cbar-track"><div class="cbar-fill" style="width:72%;background:var(--rose)"></div></div><div class="concern-pct">72% matched</div></div>
+        <div class="concern-item"><div class="concern-name">Pigmentation</div><div class="cbar-track"><div class="cbar-fill" style="width:58%;background:var(--amber)"></div></div><div class="concern-pct">58% matched</div></div>
+        <div class="concern-item"><div class="concern-name">Dehydrated</div><div class="cbar-track"><div class="cbar-fill" style="width:49%;background:var(--teal)"></div></div><div class="concern-pct">49% matched</div></div>
+        <div class="concern-item"><div class="concern-name">Sensitive</div><div class="cbar-track"><div class="cbar-fill" style="width:35%;background:var(--purple)"></div></div><div class="concern-pct">35% matched</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">SLA Performance</div>
+      <div class="sla-row"><div class="sla-name">Dispatch rate</div><div class="sla-track"><div class="sla-fill" style="width:94%;background:var(--green)"></div></div><div class="sla-val" style="color:var(--green)">94%</div></div>
+      <div class="sla-row"><div class="sla-name">On-time</div><div class="sla-track"><div class="sla-fill" style="width:88%;background:var(--teal)"></div></div><div class="sla-val" style="color:var(--teal)">88%</div></div>
+      <div class="sla-row"><div class="sla-name">RTO rate</div><div class="sla-track"><div class="sla-fill" style="width:8%;background:var(--amber)"></div></div><div class="sla-val" style="color:var(--amber)">8%</div></div>
+      <div class="sla-row"><div class="sla-name">Return rate</div><div class="sla-track"><div class="sla-fill" style="width:3%;background:var(--rose)"></div></div><div class="sla-val" style="color:var(--rose)">3.2%</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Next Payout</div>
+      <div style="display:flex;align-items:baseline;gap:6px;margin-bottom:14px"><span style="font-size:15px;color:var(--muted)">₹</span><div class="payout-amount">98,346</div></div>
+      <div class="pb-row"><span class="pb-label">Gross sales</span><span class="pb-val">₹1,04,800</span></div>
+      <div class="pb-row"><span class="pb-label">Logistics fees</span><span class="pb-val neg">−₹1,840</span></div>
+      <div class="pb-row"><span class="pb-label">Return penalties & RTO</span><span class="pb-val neg">−₹950</span></div>
+      <div class="pb-row"><span class="pb-label">Weight discrepancy</span><span class="pb-val neg">−₹520</span></div>
+      <div class="pb-row"><span class="pb-label">Shipping reserve (refundable)</span><span class="pb-val hold">−₹2,096</span></div>
+      <div class="pb-row"><span class="pb-label">TDS (1%)</span><span class="pb-val neg">−₹1,048</span></div>
+      <hr class="pb-divider">
+      <div class="pb-row"><span class="pb-label" style="font-weight:500;color:var(--text)">Net payout</span><span class="pb-val pos">₹98,346</span></div>
+      <div class="payout-date" style="margin-bottom:8px">Escrow: <strong>July 9</strong> · Reserve: <strong>July 16</strong></div>
+      <div style="font-size:10px;color:var(--muted);padding:7px 9px;background:rgba(255,255,255,0.03);border-radius:6px;line-height:1.4">Ad spend of <strong>₹8,450</strong> deducted directly from prepaid Ad Wallet.</div>
+    </div>
+  </div>
+
+  <div class="g31 fade-4">
+    <div class="card">
+      <div class="card-title">Inventory Status <span class="card-title-link">Manage →</span></div>
+      <table class="inv-table">
+        <thead><tr><th>Product</th><th>SKU</th><th>Stock</th><th>Status</th><th>HSN</th></tr></thead>
+        <tbody id="inventory-body"></tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">Financial Leakage — June</div>
+      <div class="leak-chart" id="leak-chart"></div>
+      <div class="leak-summary" id="leak-summary"></div>
+    </div>
+  </div>
+</div><!-- /dashboard -->
+
+<!-- ════════ VIEW: ORDERS ════════ -->
+<div id="view-orders" style="display:none">
+  <div class="page-header fade">
+    <div>
+      <div class="page-title">Orders <span>Management</span></div>
+      <div class="page-sub">June 2025 · 847 total orders · 3 require urgent action</div>
+    </div>
+    <div class="hdr-actions">
+      <button class="btn btn-ghost">↓ Export CSV</button>
+      <button class="btn btn-primary">🖨 Bulk Print Labels</button>
+    </div>
+  </div>
+
+  <!-- Urgency Banner -->
+  <div class="urgency-bar fade">
+    <div class="urgency-icon">🚨</div>
+    <div class="urgency-text"><strong>3 orders will breach SLA</strong> — dispatch required within the next window to avoid penalties</div>
+    <div class="urgency-timer" id="sla-timer">1:48:00</div>
+    <button class="btn btn-danger btn-sm">Print Urgent Labels</button>
+  </div>
+
+  <!-- Orders KPIs -->
+  <div class="orders-kpi fade-1">
+    <div class="okpi"><div class="okpi-val">847</div><div class="okpi-lbl">Total this month</div></div>
+    <div class="okpi"><div class="okpi-val" style="color:var(--amber)">3</div><div class="okpi-lbl">SLA breach risk</div></div>
+    <div class="okpi"><div class="okpi-val" style="color:var(--teal)">440</div><div class="okpi-lbl">Confirmed</div></div>
+    <div class="okpi"><div class="okpi-val" style="color:var(--blue)">237</div><div class="okpi-lbl">In transit</div></div>
+    <div class="okpi"><div class="okpi-val" style="color:var(--green)">102</div><div class="okpi-lbl">Delivered</div></div>
+  </div>
+
+  <!-- Filter toolbar -->
+  <div class="orders-toolbar fade-1">
+    <div class="search-box">
+      <span class="search-icon">⌕</span>
+      <input type="text" placeholder="Search order ID, customer name, product…" oninput="filterOrders(this.value)">
+    </div>
+    <div class="filter-tabs" id="order-filter-tabs">
+      <div class="ftab active" onclick="setOrderFilter('all',this)">All Orders</div>
+      <div class="ftab" onclick="setOrderFilter('urgent',this)">🚨 Urgent</div>
+      <div class="ftab" onclick="setOrderFilter('confirmed',this)">Confirmed</div>
+      <div class="ftab" onclick="setOrderFilter('transit',this)">In Transit</div>
+      <div class="ftab" onclick="setOrderFilter('delivered',this)">Delivered</div>
+      <div class="ftab" onclick="setOrderFilter('cod',this)">Pending COD</div>
+    </div>
+  </div>
+
+  <div class="orders-table-wrap fade-2">
+    <table class="orders-table">
+      <thead>
+        <tr>
+          <th>Order ID</th>
+          <th>Customer</th>
+          <th>Product</th>
+          <th>Amount</th>
+          <th>Status</th>
+          <th>SLA</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="orders-table-body"></tbody>
+    </table>
+  </div>
+</div><!-- /orders -->
+
+<!-- ════════ VIEW: ANALYTICS ════════ -->
+<div id="view-analytics" style="display:none">
+  <div class="page-header fade">
+    <div>
+      <div class="page-title">Analytics <span>Deep Dive</span></div>
+      <div class="page-sub">Lumière Botanics · Performance intelligence · June 2025</div>
+    </div>
+    <div class="hdr-actions">
+      <div class="period-toggle">
+        <div class="ptab active" onclick="setPeriod('7d',this)">7D</div>
+        <div class="ptab" onclick="setPeriod('30d',this)">30D</div>
+        <div class="ptab" onclick="setPeriod('90d',this)">90D</div>
+        <div class="ptab" onclick="setPeriod('ytd',this)">YTD</div>
+      </div>
+      <button class="btn btn-ghost">↓ Export</button>
+    </div>
+  </div>
+
+  <!-- Revenue + Conversion Funnel -->
+  <div class="analytics-grid-top fade-1">
+    <div class="card">
+      <div class="card-title">Revenue Breakdown <span style="font-size:11px;color:var(--muted);text-transform:none;letter-spacing:0" id="period-label">Last 30 days</span></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px">
+        <div><div style="font-size:10px;color:var(--muted);margin-bottom:3px">Total Revenue</div><div style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;color:var(--text)">₹2,40,250</div><div style="font-size:10px;color:var(--green)">↑ 18.3% vs last month</div></div>
+        <div><div style="font-size:10px;color:var(--muted);margin-bottom:3px">Prepaid</div><div style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;color:var(--teal)">₹1,55,860</div><div style="font-size:10px;color:var(--muted)">64.9% of revenue</div></div>
+        <div><div style="font-size:10px;color:var(--muted);margin-bottom:3px">COD</div><div style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;color:var(--amber)">₹84,390</div><div style="font-size:10px;color:var(--muted)">35.1% of revenue</div></div>
+      </div>
+      <div class="big-chart-wrap">
+        <div class="big-chart-bars" id="analytics-revenue-chart">
+          <!-- rendered by JS -->
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Conversion Funnel</div>
+      <div class="funnel-wrap">
+        <div class="funnel-row">
+          <div class="funnel-label">Akhtar Impressions <span>2,841</span></div>
+          <div class="funnel-bar" style="width:100%;background:rgba(232,196,160,.25);color:var(--accent)">2,841</div>
+        </div>
+        <div class="funnel-row">
+          <div class="funnel-label">Product Page Views <span>1,704 · 60%</span></div>
+          <div class="funnel-bar" style="width:60%;background:rgba(107,184,168,.3);color:var(--teal)">1,704</div>
+          <div class="funnel-rate">60% pass-through</div>
+        </div>
+        <div class="funnel-row">
+          <div class="funnel-label">Add to Cart <span>682 · 40%</span></div>
+          <div class="funnel-bar" style="width:40%;background:rgba(155,139,212,.3);color:var(--purple)">682</div>
+          <div class="funnel-rate">40% add-to-cart rate</div>
+        </div>
+        <div class="funnel-row">
+          <div class="funnel-label">Purchased <span>966 · 34%</span></div>
+          <div class="funnel-bar" style="width:34%;background:rgba(122,184,122,.35);color:var(--green)">966</div>
+          <div class="funnel-rate" style="color:var(--green);font-weight:500">34% overall conversion ↑</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Channel + Geo + Cohort -->
+  <div class="analytics-grid-mid fade-2">
+    <div class="card">
+      <div class="card-title">Revenue by Channel</div>
+      <div class="channel-list">
+        <div class="channel-row">
+          <div class="channel-icon" style="background:rgba(232,196,160,.1);color:var(--accent)">✦</div>
+          <div style="flex:1"><div class="channel-name">Akhtar AI Recommendations</div><div class="channel-sub">AI skin match → direct purchase</div></div>
+          <div style="text-align:right"><div class="channel-val">₹97,200</div><div class="channel-delta cd-up">↑ 28%</div></div>
+        </div>
+        <div style="height:1px;background:var(--border);margin:2px 0"></div>
+        <div class="channel-row">
+          <div class="channel-icon" style="background:rgba(107,184,168,.1);color:var(--teal)">◈</div>
+          <div style="flex:1"><div class="channel-name">Organic Search</div><div class="channel-sub">Browse & search on platform</div></div>
+          <div style="text-align:right"><div class="channel-val">₹79,400</div><div class="channel-delta cd-up">↑ 12%</div></div>
+        </div>
+        <div style="height:1px;background:var(--border);margin:2px 0"></div>
+        <div class="channel-row">
+          <div class="channel-icon" style="background:rgba(155,139,212,.1);color:var(--purple)">◻</div>
+          <div style="flex:1"><div class="channel-name">Platform Sale Events</div><div class="channel-sub">Summer Glow + Akhtar Boost Week</div></div>
+          <div style="text-align:right"><div class="channel-val">₹38,650</div><div class="channel-delta cd-up">↑ 44%</div></div>
+        </div>
+        <div style="height:1px;background:var(--border);margin:2px 0"></div>
+        <div class="channel-row">
+          <div class="channel-icon" style="background:rgba(212,168,87,.1);color:var(--amber)">❋</div>
+          <div style="flex:1"><div class="channel-name">Brand Coupon Codes</div><div class="channel-sub">LUMIERE15 · BOGO</div></div>
+          <div style="text-align:right"><div class="channel-val">₹25,000</div><div class="channel-delta cd-dn">↓ 3%</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Revenue by City</div>
+      <div class="geo-list">
+        <div class="geo-row"><div class="geo-flag">🏙</div><div class="geo-city">Mumbai</div><div class="geo-track"><div class="geo-fill" style="width:88%"></div></div><div class="geo-pct">22%</div><div class="geo-rev">₹52,800</div></div>
+        <div class="geo-row"><div class="geo-flag">🌆</div><div class="geo-city">Bengaluru</div><div class="geo-track"><div class="geo-fill" style="width:72%"></div></div><div class="geo-pct">18%</div><div class="geo-rev">₹43,200</div></div>
+        <div class="geo-row"><div class="geo-flag">🏛</div><div class="geo-city">Delhi NCR</div><div class="geo-track"><div class="geo-fill" style="width:63%"></div></div><div class="geo-pct">16%</div><div class="geo-rev">₹38,400</div></div>
+        <div class="geo-row"><div class="geo-flag">🌇</div><div class="geo-city">Hyderabad</div><div class="geo-track"><div class="geo-fill" style="width:44%"></div></div><div class="geo-pct">11%</div><div class="geo-rev">₹26,400</div></div>
+        <div class="geo-row"><div class="geo-flag">🏘</div><div class="geo-city">Pune</div><div class="geo-track"><div class="geo-fill" style="width:36%"></div></div><div class="geo-pct">9%</div><div class="geo-rev">₹21,600</div></div>
+        <div class="geo-row"><div class="geo-flag">🌃</div><div class="geo-city">Chennai</div><div class="geo-track"><div class="geo-fill" style="width:28%"></div></div><div class="geo-pct">7%</div><div class="geo-rev">₹16,800</div></div>
+        <div class="geo-row"><div class="geo-flag">◻</div><div class="geo-city">Other cities</div><div class="geo-track"><div class="geo-fill" style="width:20%;background:var(--muted)"></div></div><div class="geo-pct">17%</div><div class="geo-rev">₹41,050</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Repeat Purchase Cohort</div>
+      <div style="margin-bottom:10px;font-size:11px;color:var(--muted);line-height:1.4">% of customers who repurchased within 30 / 60 / 90 days</div>
+      <table class="cohort-table">
+        <thead><tr><th>Product</th><th>30d</th><th>60d</th><th>90d</th></tr></thead>
+        <tbody>
+          <tr>
+            <td style="font-size:11px;color:var(--text)">Niacinamide Serum</td>
+            <td><span style="background:rgba(122,184,122,.2);color:var(--green);padding:2px 6px;border-radius:4px;font-size:11px;font-weight:500">38%</span></td>
+            <td><span style="background:rgba(122,184,122,.15);color:var(--green);padding:2px 6px;border-radius:4px;font-size:11px">52%</span></td>
+            <td><span style="background:rgba(122,184,122,.1);color:var(--green);padding:2px 6px;border-radius:4px;font-size:11px">61%</span></td>
+          </tr>
+          <tr>
+            <td style="font-size:11px;color:var(--text)">Vitamin C SPF</td>
+            <td><span style="background:rgba(107,184,168,.15);color:var(--teal);padding:2px 6px;border-radius:4px;font-size:11px;font-weight:500">22%</span></td>
+            <td><span style="background:rgba(107,184,168,.12);color:var(--teal);padding:2px 6px;border-radius:4px;font-size:11px">34%</span></td>
+            <td><span style="background:rgba(107,184,168,.1);color:var(--teal);padding:2px 6px;border-radius:4px;font-size:11px">43%</span></td>
+          </tr>
+          <tr>
+            <td style="font-size:11px;color:var(--text)">HA Toner</td>
+            <td><span style="background:rgba(212,168,87,.15);color:var(--amber);padding:2px 6px;border-radius:4px;font-size:11px;font-weight:500">18%</span></td>
+            <td><span style="background:rgba(212,168,87,.12);color:var(--amber);padding:2px 6px;border-radius:4px;font-size:11px">29%</span></td>
+            <td><span style="background:rgba(212,168,87,.1);color:var(--amber);padding:2px 6px;border-radius:4px;font-size:11px">38%</span></td>
+          </tr>
+          <tr>
+            <td style="font-size:11px;color:var(--text)">Rose Hip Oil</td>
+            <td><span style="background:rgba(201,96,96,.12);color:var(--rose);padding:2px 6px;border-radius:4px;font-size:11px;font-weight:500">9%</span></td>
+            <td><span style="background:rgba(201,96,96,.1);color:var(--rose);padding:2px 6px;border-radius:4px;font-size:11px">16%</span></td>
+            <td><span style="background:rgba(201,96,96,.08);color:var(--rose);padding:2px 6px;border-radius:4px;font-size:11px">24%</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Insights + Product Performance -->
+  <div class="analytics-grid-bot fade-3">
+    <div class="card">
+      <div class="card-title">Product Performance Heatmap</div>
+      <table style="width:100%;border-collapse:collapse">
+        <thead><tr>
+          <th style="text-align:left;font-size:9px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);padding:0 0 10px;border-bottom:1px solid var(--border);opacity:.6">Product</th>
+          <th style="font-size:9px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);padding:0 8px 10px;border-bottom:1px solid var(--border);opacity:.6;text-align:center">Revenue</th>
+          <th style="font-size:9px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);padding:0 8px 10px;border-bottom:1px solid var(--border);opacity:.6;text-align:center">Units</th>
+          <th style="font-size:9px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);padding:0 8px 10px;border-bottom:1px solid var(--border);opacity:.6;text-align:center">Return %</th>
+          <th style="font-size:9px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);padding:0 8px 10px;border-bottom:1px solid var(--border);opacity:.6;text-align:center">Rating</th>
+          <th style="font-size:9px;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);padding:0 0 10px;border-bottom:1px solid var(--border);opacity:.6;text-align:center">Repeat</th>
+        </tr></thead>
+        <tbody>
+          <tr><td style="padding:9px 0;font-size:11.5px;color:var(--text);border-bottom:1px solid var(--border)">Niacinamide Serum</td><td style="padding:9px 8px;text-align:center;border-bottom:1px solid var(--border)"><span style="background:rgba(122,184,122,.25);color:var(--green);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:500">₹68.4K</span></td><td style="padding:9px 8px;text-align:center;border-bottom:1px solid var(--border);font-size:11px">342</td><td style="padding:9px 8px;text-align:center;border-bottom:1px solid var(--border)"><span style="background:rgba(122,184,122,.15);color:var(--green);padding:2px 7px;border-radius:4px;font-size:11px">1.8%</span></td><td style="padding:9px 8px;text-align:center;border-bottom:1px solid var(--border);font-size:11px;color:var(--amber)">4.9★</td><td style="padding:9px 0;text-align:center;border-bottom:1px solid var(--border)"><span style="background:rgba(122,184,122,.2);color:var(--green);padding:2px 7px;border-radius:4px;font-size:11px">61%</span></td></tr>
+          <tr><td style="padding:9px 0;font-size:11.5px;color:var(--text);border-bottom:1px solid var(--border)">Vitamin C SPF</td><td style="padding:9px 8px;text-align:center;border-bottom:1px solid var(--border)"><span style="background:rgba(107,184,168,.2);color:var(--teal);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:500">₹53.3K</span></td><td style="padding:9px 8px;text-align:center;border-bottom:1px solid var(--border);font-size:11px">213</td><td style="padding:9px 8px;text-align:center;border-bottom:1px solid var(--border)"><span style="background:rgba(212,168,87,.15);color:var(--amber);padding:2px 7px;border-radius:4px;font-size:11px">4.2%</span></td><td style="padding:9px 8px;text-align:center;border-bottom:1px solid var(--border);font-size:11px;color:var(--amber)">4.3★</td><td style="padding:9px 0;text-align:center;border-bottom:1px solid var(--border)"><span style="background:rgba(107,184,168,.15);color:var(--teal);padding:2px 7px;border-radius:4px;font-size:11px">43%</span></td></tr>
+          <tr><td style="padding:9px 0;font-size:11.5px;color:var(--text);border-bottom:1px solid var(--border)">HA Toner</td><td style="padding:9px 8px;text-align:center;border-bottom:1px solid var(--border)"><span style="background:rgba(155,139,212,.15);color:var(--purple);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:500">₹41.8K</span></td><td style="padding:9px 8px;text-align:center;border-bottom:1px solid var(--border);font-size:11px">190</td><td style="padding:9px 8px;text-align:center;border-bottom:1px solid var(--border)"><span style="background:rgba(122,184,122,.15);color:var(--green);padding:2px 7px;border-radius:4px;font-size:11px">2.1%</span></td><td style="padding:9px 8px;text-align:center;border-bottom:1px solid var(--border);font-size:11px;color:var(--amber)">4.8★</td><td style="padding:9px 0;text-align:center;border-bottom:1px solid var(--border)"><span style="background:rgba(212,168,87,.15);color:var(--amber);padding:2px 7px;border-radius:4px;font-size:11px">38%</span></td></tr>
+          <tr><td style="padding:9px 0;font-size:11.5px;color:var(--text);border-bottom:1px solid var(--border)">Retinol Night</td><td style="padding:9px 8px;text-align:center;border-bottom:1px solid var(--border)"><span style="background:rgba(201,96,96,.12);color:var(--red);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:500">₹30.1K</span></td><td style="padding:9px 8px;text-align:center;border-bottom:1px solid var(--border);font-size:11px;color:var(--red)">86 ⚠</td><td style="padding:9px 8px;text-align:center;border-bottom:1px solid var(--border)"><span style="background:rgba(201,96,96,.12);color:var(--red);padding:2px 7px;border-radius:4px;font-size:11px">5.8%</span></td><td style="padding:9px 8px;text-align:center;border-bottom:1px solid var(--border);font-size:11px;color:var(--amber)">4.5★</td><td style="padding:9px 0;text-align:center;border-bottom:1px solid var(--border)"><span style="background:rgba(201,96,96,.1);color:var(--rose);padding:2px 7px;border-radius:4px;font-size:11px">24%</span></td></tr>
+          <tr><td style="padding:9px 0;font-size:11.5px;color:var(--text)">Rose Hip Oil</td><td style="padding:9px 8px;text-align:center"><span style="background:rgba(122,184,122,.1);color:var(--green);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:500">₹22.1K</span></td><td style="padding:9px 8px;text-align:center;font-size:11px">147</td><td style="padding:9px 8px;text-align:center"><span style="background:rgba(122,184,122,.12);color:var(--green);padding:2px 7px;border-radius:4px;font-size:11px">2.0%</span></td><td style="padding:9px 8px;text-align:center;font-size:11px;color:var(--amber)">4.7★</td><td style="padding:9px 0;text-align:center"><span style="background:rgba(201,96,96,.1);color:var(--rose);padding:2px 7px;border-radius:4px;font-size:11px">24%</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">AI Insights</div>
+      <div class="insight-cards">
+        <div class="insight-card positive">
+          <div class="insight-icon">📈</div>
+          <div class="insight-title">Niacinamide driving 61% repeat purchase</div>
+          <div class="insight-body">Highest LTV product. Consider a bundle with HA Toner to increase AOV on first purchase — Akhtar match rate supports cross-sell.</div>
+        </div>
+        <div class="insight-card warning">
+          <div class="insight-icon">⚠️</div>
+          <div class="insight-title">Vitamin C SPF return rate rising (4.2%)</div>
+          <div class="insight-body">3 pump-related reviews flagged. Investigate LB-VTC-50 packaging quality with supplier before next restock.</div>
+        </div>
+        <div class="insight-card warning">
+          <div class="insight-icon">📦</div>
+          <div class="insight-title">2 OOS SKUs costing ~₹18K in lost revenue</div>
+          <div class="insight-body">Retinol Night Repair and Ceramide Repair Cream are hidden from Akhtar. Estimated monthly revenue loss based on previous velocity.</div>
+        </div>
+        <div class="insight-card info">
+          <div class="insight-icon">🌆</div>
+          <div class="insight-title">Bengaluru growing fastest (+34% MoM)</div>
+          <div class="insight-body">Consider targeted Akhtar Boost campaigns for Bengaluru skin concern profile (pigmentation + humidity-related concerns).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /analytics -->
+
+<!-- ════════ VIEW: ACTIVITY FEED ════════ -->
+<div id="view-activity" style="display:none">
+  <div class="page-header fade">
+    <div>
+      <div class="page-title">Activity <span>Feed</span></div>
+      <div class="page-sub">All events across orders, finance, reviews, and Akhtar AI · Real-time</div>
+    </div>
+    <div class="hdr-actions">
+      <button class="btn btn-ghost" onclick="markAllRead()">✓ Mark all read</button>
+    </div>
+  </div>
+
+  <div class="feed-filters fade" id="feed-filter-pills">
+    <div class="feed-pill active" onclick="setFeedFilter('all',this)">All Activity</div>
+    <div class="feed-pill" onclick="setFeedFilter('order',this)">📦 Orders</div>
+    <div class="feed-pill" onclick="setFeedFilter('finance',this)">💳 Finance</div>
+    <div class="feed-pill" onclick="setFeedFilter('review',this)">⭐ Reviews</div>
+    <div class="feed-pill" onclick="setFeedFilter('return',this)">↩ Returns</div>
+    <div class="feed-pill" onclick="setFeedFilter('ai',this)">✦ Akhtar AI</div>
+    <div class="feed-pill" onclick="setFeedFilter('promo',this)">◁ Campaigns</div>
+    <div class="feed-pill" onclick="setFeedFilter('system',this)">⚙ System</div>
+  </div>
+
+  <div class="activity-layout fade-1">
+    <div class="timeline" id="activity-timeline"></div>
+
+    <div class="notif-panel">
+      <div>
+        <div class="notif-section-title">Unread Notifications</div>
+        <div style="display:flex;flex-direction:column;gap:8px" id="notif-list"></div>
+      </div>
+      <div>
+        <div class="notif-section-title" style="margin-top:14px">Today's Summary</div>
+        <div class="stats-summary">
+          <div class="ss-row"><span class="ss-label">New orders</span><span class="ss-val">34</span></div>
+          <div class="ss-row"><span class="ss-label">Dispatched</span><span class="ss-val">31</span></div>
+          <div class="ss-row"><span class="ss-label">Delivered</span><span class="ss-val">28</span></div>
+          <div class="ss-row"><span class="ss-label">Revenue today</span><span class="ss-val">₹14,820</span></div>
+          <div class="ss-row"><span class="ss-label">New reviews</span><span class="ss-val">4</span></div>
+          <div class="ss-row"><span class="ss-label">Return requests</span><span class="ss-val">2</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- /activity -->
+
+<!-- ════════ VIEW: PROMOS ════════ -->
+<div id="view-promos" style="display:none">
+  <div class="page-header fade">
+    <div>
+      <div class="page-title">Promos <span>& Offers</span></div>
+      <div class="page-sub">Manage your campaigns · Opt into platform sales · Create brand-specific deals</div>
+    </div>
+    <div class="hdr-actions"><button class="btn btn-primary">+ New Offer</button></div>
+  </div>
+  <div class="g2 fade-1">
+    <div class="card">
+      <div class="card-title">Revenue split — organic vs promo</div>
+      <div style="display:flex;gap:20px;align-items:center;margin-top:4px">
+        <svg viewBox="0 0 100 100" width="90" height="90">
+          <circle cx="50" cy="50" r="38" fill="none" stroke="var(--surface2)" stroke-width="11"/>
+          <circle cx="50" cy="50" r="38" fill="none" stroke="var(--teal)" stroke-width="11" stroke-dasharray="139 100" stroke-dashoffset="0" transform="rotate(-90 50 50)"/>
+          <circle cx="50" cy="50" r="38" fill="none" stroke="var(--purple)" stroke-width="11" stroke-dasharray="62 177" stroke-dashoffset="-139" transform="rotate(-90 50 50)"/>
+          <circle cx="50" cy="50" r="38" fill="none" stroke="var(--amber)" stroke-width="11" stroke-dasharray="38 201" stroke-dashoffset="-201" transform="rotate(-90 50 50)"/>
+          <text x="50" y="46" text-anchor="middle" fill="var(--text)" font-family="Cormorant Garamond,serif" font-size="16">58%</text>
+          <text x="50" y="57" text-anchor="middle" fill="var(--muted)" font-family="DM Sans,sans-serif" font-size="7">organic</text>
+        </svg>
+        <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--teal);width:9px;height:9px;border-radius:2px"></div><span style="flex:1;font-size:12px">Organic sales</span><span style="font-size:12px;font-weight:500;color:var(--text)">58%</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--purple);width:9px;height:9px;border-radius:2px"></div><span style="flex:1;font-size:12px">Platform sale</span><span style="font-size:12px;font-weight:500;color:var(--text)">26%</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--amber);width:9px;height:9px;border-radius:2px"></div><span style="flex:1;font-size:12px">Brand offers</span><span style="font-size:12px;font-weight:500;color:var(--text)">16%</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Platform — Opt-in Sales</div>
+      <div class="promo-list">
+        <div class="promo-item"><span class="promo-type-pill pt-platform">Platform</span><div style="flex:1"><div class="promo-name">Summer Glow Sale</div><div class="promo-sub">Jul 15–20 · 20% off sitewide skincare</div></div><div class="promo-toggle pt-on" onclick="this.classList.toggle('pt-on');this.classList.toggle('pt-off')"><div class="pt-thumb"></div></div></div>
+        <div class="promo-item"><span class="promo-type-pill pt-platform">Platform</span><div style="flex:1"><div class="promo-name">Akhtar Boost Week</div><div class="promo-sub">Jun 28–Jul 5 · AI-recommended SKUs featured</div></div><div class="promo-toggle pt-on" onclick="this.classList.toggle('pt-on');this.classList.toggle('pt-off')"><div class="pt-thumb"></div></div></div>
+        <div class="promo-item"><span class="promo-type-pill pt-platform">Platform</span><div style="flex:1"><div class="promo-name">Monsoon Skincare Edit</div><div class="promo-sub">Starts Jul 22 · Curated editorial feature</div></div><div class="promo-toggle pt-off" onclick="this.classList.toggle('pt-on');this.classList.toggle('pt-off')"><div class="pt-thumb"></div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="card fade-2">
+    <div class="card-title">Your Brand Offers <span class="card-title-link">+ Create new →</span></div>
+    <div class="promo-list">
+      <div class="promo-item"><span class="promo-type-pill pt-brand">Brand</span><div style="flex:1"><div class="promo-name">Buy 1 Get 1 — Niacinamide Serum</div><div class="promo-sub">Active · Ends Jun 30</div></div><div class="promo-stat"><div class="promo-stat-val" style="color:var(--green)">+₹8,400</div><div class="promo-stat-lbl">revenue lifted</div></div><div class="promo-toggle pt-on" onclick="this.classList.toggle('pt-on');this.classList.toggle('pt-off')"><div class="pt-thumb"></div></div></div>
+      <div class="promo-item"><span class="promo-type-pill pt-expiry">Near Expiry</span><div style="flex:1"><div class="promo-name">30% off — HA Toner (exp. Aug 2025)</div><div class="promo-sub">12 units to clear</div></div><div class="promo-stat"><div class="promo-stat-val">12 units</div><div class="promo-stat-lbl">to clear</div></div><div class="promo-toggle pt-on" onclick="this.classList.toggle('pt-on');this.classList.toggle('pt-off')"><div class="pt-thumb"></div></div></div>
+      <div class="promo-item"><span class="promo-type-pill pt-brand">Brand</span><div style="flex:1"><div class="promo-name">LUMIERE15 — 15% off first order</div><div class="promo-sub">Ongoing · 482 redemptions · No cap</div></div><div class="promo-stat"><div class="promo-stat-val">482</div><div class="promo-stat-lbl">redemptions</div></div><div class="promo-toggle pt-on" onclick="this.classList.toggle('pt-on');this.classList.toggle('pt-off')"><div class="pt-thumb"></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ VIEW: FINANCE ════════ -->
+<div id="view-finance" style="display:none">
+  <div class="page-header fade">
+    <div>
+      <div class="page-title">Finance <span>& Payouts</span></div>
+      <div class="page-sub">Settlement history · GST reports · Shipping reserve tracker</div>
+    </div>
+    <div class="hdr-actions"><button class="btn btn-ghost">↓ Download GSTR-8</button></div>
+  </div>
+  <div class="g2 fade-1">
+    <div class="card">
+      <div class="card-title">Settlement History</div>
+      <table class="inv-table">
+        <thead><tr><th>Period</th><th>Gross</th><th>Net Payout</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td style="font-weight:500">Jun 1–7</td><td>₹38,200</td><td style="color:var(--green);font-weight:500">₹35,900</td><td><span class="stock-pill sp-good">Paid</span></td></tr>
+          <tr><td style="font-weight:500">Jun 8–14</td><td>₹41,600</td><td style="color:var(--green);font-weight:500">₹39,100</td><td><span class="stock-pill sp-good">Paid</span></td></tr>
+          <tr><td style="font-weight:500">Jun 15–21</td><td>₹45,100</td><td style="color:var(--green);font-weight:500">₹42,400</td><td><span class="stock-pill sp-good">Paid</span></td></tr>
+          <tr><td style="font-weight:500">Jun 22–28</td><td>₹44,900</td><td style="color:var(--amber);font-weight:500">₹42,210</td><td><span class="stock-pill sp-low">Escrow</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">Shipping Reserve Tracker</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px">
+        <div style="padding:10px 12px;background:var(--surface2);border-radius:8px;border:1px solid var(--border)"><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:11.5px;font-weight:500;color:var(--text)">Jun 15–21 reserve</span><span style="font-size:11.5px;color:var(--green);font-weight:500">₹902</span></div><div style="font-size:11px;color:var(--muted)">Releases July 16 · No discrepancy received</div></div>
+        <div style="padding:10px 12px;background:var(--surface2);border-radius:8px;border:1px solid var(--border)"><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:11.5px;font-weight:500;color:var(--text)">Jun 22–28 reserve</span><span style="font-size:11.5px;color:var(--amber);font-weight:500">₹2,096</span></div><div style="font-size:11px;color:var(--muted)">Releases July 22 · Holding period active</div></div>
+        <div style="padding:10px 12px;background:rgba(201,96,96,.06);border-radius:8px;border:1px solid rgba(201,96,96,.14)"><div style="display:flex;justify-content:space-between;margin-bottom:3px"><span style="font-size:11.5px;font-weight:500;color:var(--text)">May 28 — weight discrepancy</span><span style="font-size:11.5px;color:var(--red);font-weight:500">−₹520</span></div><div style="font-size:11px;color:var(--muted);display:flex;justify-content:space-between;align-items:center"><span>Shiprocket charge · Deducted from reserve</span><button class="btn btn-ghost btn-sm" style="padding:2px 6px;font-size:9px">Dispute</button></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ VIEW: STOREFRONT ════════ -->
+<div id="view-storefront" style="display:none">
+  <div class="page-header fade">
+    <div>
+      <div class="page-title">Brand <span>Profile</span></div>
+      <div class="page-sub">Manage your public storefront on Relaxed & Refresh</div>
+    </div>
+    <div class="hdr-actions">
+      <button class="btn btn-ghost">Preview Storefront</button>
+      <button class="btn btn-primary">Save Changes</button>
+    </div>
+  </div>
+  <div class="g2 fade-1">
+    <div class="card">
+      <div class="card-title">Storefront Preview</div>
+      <div class="storefront-preview">
+        <div class="sf-hero"><div class="sf-hero-text">Hero Banner — 1440×400px</div><div class="sf-hero-edit">✎ Edit</div></div>
+        <div class="sf-logo-row"><div class="sf-logo">✦</div><div><div class="sf-brand-name">Lumière Botanics</div><div class="sf-brand-sub">Clean skincare · India</div></div></div>
+      </div>
+      <div class="cert-list"><span class="cert-badge">✓ Cruelty-free</span><span class="cert-badge">✓ Vegan</span><span class="cert-badge">✓ Dermatologist tested</span><span class="cert-badge">✓ PETA certified</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Brand Details</div>
+      <div class="sf-field"><label>Brand Name</label><input class="sf-input" type="text" value="Lumière Botanics"></div>
+      <div class="sf-field"><label>Tagline</label><input class="sf-input" type="text" value="Clean beauty, honest ingredients."></div>
+      <div class="sf-field"><label>About Us</label><textarea class="sf-input sf-textarea">Lumière Botanics was founded in 2019 with a simple belief — skincare should be transparent, effective, and kind.</textarea></div>
+      <div class="sf-field"><label>Website</label><input class="sf-input" type="text" value="https://lumierebotanics.in"></div>
+    </div>
+  </div>
+</div>
+
+</main>
+</div>
+
+<script>
+// ─── VIEW ROUTING ───
+function switchView(v, navEl) {
+  document.querySelectorAll('[id^="view-"]').forEach(el => el.style.display = 'none');
+  document.getElementById('view-' + v).style.display = 'block';
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+  if (navEl) navEl.classList.add('active');
+  else {
+    document.querySelectorAll('.nav-item').forEach(el => {
+      if (el.getAttribute('onclick') && el.getAttribute('onclick').includes("'"+v+"'")) el.classList.add('active');
+    });
+  }
+}
+
+// ─── MOCK DATA ───
+const mockInventory = [
+  { name: "Niacinamide 10% Serum", sku: "LB-NIA-30", stock: 218, status: "Good", hsn: "3304" },
+  { name: "Vitamin C Brightening SPF", sku: "LB-VTC-50", stock: 94, status: "Good", hsn: "3304" },
+  { name: "Hyaluronic Acid Toner", sku: "LB-HAT-100", stock: 12, status: "Low", hsn: "3304" },
+  { name: "Retinol Night Repair", sku: "LB-RET-30", stock: 0, status: "Out of stock", hsn: "3304" },
+  { name: "Rose Hip Face Oil", sku: "LB-RHO-20", stock: 57, status: "Good", hsn: "3305" },
+  { name: "Ceramide Repair Cream", sku: "LB-CER-50", stock: 0, status: "Out of stock", hsn: "3304" }
+];
+
+const mockLeakage = {
+  chart: [
+    { label: "RTO logistics", amount: "₹4,320", pct: 72, color: "var(--red)", dispute: false },
+    { label: "Return pickups", amount: "₹1,980", pct: 38, color: "var(--rose)", dispute: false },
+    { label: "Return penalties", amount: "₹950", pct: 18, color: "var(--amber)", dispute: true },
+    { label: "Weight discrepancy", amount: "₹520", pct: 10, color: "var(--purple)", dispute: true }
+  ],
+  summary: [
+    { val: "₹7,770", color: "var(--red)", lbl: "Total lost this month" },
+    { val: "8%", color: "var(--amber)", lbl: "RTO rate — 10% triggers surcharge" },
+    { val: "₹4,320", color: "var(--rose)", lbl: "RTO spend — COD exposure" },
+    { val: "₹2,930", color: "var(--green)", lbl: "Reserve held — releases Jul 16" }
+  ]
+};
+
+const mockOrders = [
+  { id:"RNR-88430", date:"Jun 26, 9:14am", customer:"Priya Mehta", city:"Mumbai", product:"Niacinamide 10% Serum 30ml", sku:"LB-NIA-30", amount:"₹599", type:"Prepaid", status:"confirmed", sla:"breach", slaText:"1h 22m left" },
+  { id:"RNR-88427", date:"Jun 26, 8:58am", customer:"Rohan Kapoor", city:"Delhi NCR", product:"Vitamin C Brightening SPF 50ml", sku:"LB-VTC-50", amount:"₹899", type:"Prepaid", status:"confirmed", sla:"breach", slaText:"1h 48m left" },
+  { id:"RNR-88419", date:"Jun 26, 7:33am", customer:"Ananya Singh", city:"Bengaluru", product:"HA Toner 100ml + Serum Bundle", sku:"LB-HAT-100", amount:"₹1,098", type:"Prepaid", status:"confirmed", sla:"breach", slaText:"2h 06m left" },
+  { id:"RNR-88411", date:"Jun 26, 6:10am", customer:"Sneha Rao", city:"Pune", product:"Rose Hip Face Oil 20ml", sku:"LB-RHO-20", amount:"₹799", type:"COD", status:"confirmed", sla:"ok", slaText:"6h 40m" },
+  { id:"RNR-88398", date:"Jun 25, 11:45pm", customer:"Kiran Nair", city:"Hyderabad", product:"Niacinamide 10% Serum 30ml", sku:"LB-NIA-30", amount:"₹599", type:"Prepaid", status:"transit", sla:"ok", slaText:"On time" },
+  { id:"RNR-88391", date:"Jun 25, 10:22pm", customer:"Aisha Hussain", city:"Chennai", product:"Vitamin C Brightening SPF", sku:"LB-VTC-50", amount:"₹899", type:"Prepaid", status:"transit", sla:"ok", slaText:"On time" },
+  { id:"RNR-88380", date:"Jun 25, 8:14pm", customer:"Dev Sharma", city:"Jaipur", product:"HA Toner 100ml", sku:"LB-HAT-100", amount:"₹649", type:"COD", status:"transit", sla:"ok", slaText:"On time" },
+  { id:"RNR-88342", date:"Jun 25, 3:30pm", customer:"Meera Patel", city:"Ahmedabad", product:"Rose Hip Face Oil 20ml", sku:"LB-RHO-20", amount:"₹799", type:"Prepaid", status:"delivered", sla:"ok", slaText:"Delivered" },
+  { id:"RNR-88310", date:"Jun 24, 11:00am", customer:"Vikram Joshi", city:"Mumbai", product:"Niacinamide 10% Serum", sku:"LB-NIA-30", amount:"₹599", type:"COD", status:"cod", sla:"ok", slaText:"Awaiting COD" },
+  { id:"RNR-88304", date:"Jun 24, 9:48am", customer:"Risha Desai", city:"Bengaluru", product:"Vitamin C Brightening SPF", sku:"LB-VTC-50", amount:"₹899", type:"Prepaid", status:"return", sla:"warn", slaText:"Return dispute" }
+];
+
+let currentOrderFilter = 'all';
+let currentFeedFilter = 'all';
+
+const activityFeed = [
+  { date: "Today", items: [
+    { time:"2 min ago", icon:"🚨", type:"order", badge:"tb-order", title:"3 orders approaching SLA breach", detail:"#RNR-88430, #RNR-88427, #RNR-88419 require dispatch within 2 hours", expandable: true },
+    { time:"14 min ago", icon:"⭐", type:"review", badge:"tb-review", title:"New 5★ review on <em>Niacinamide Serum</em>", detail:"Ananya K. from Bengaluru — 'Akhtar recommended it and it was 100% right!'" },
+    { time:"22 min ago", icon:"✦", type:"ai", badge:"tb-ai", title:"Akhtar matched 48 new users to your products", detail:"Acne-prone + Dehydration profiles · 34% avg conversion rate this session" },
+    { time:"1h ago", icon:"📦", type:"order", badge:"tb-order", title:"Order #RNR-88411 confirmed", detail:"Rose Hip Face Oil · Sneha Rao, Pune · ₹799 COD" },
+    { time:"1h 20m ago", icon:"💳", type:"finance", badge:"tb-finance", title:"Weekly settlement processed", detail:"₹42,400 net payout for Jun 15–21 · Transferred to bank account ending 4421" },
+    { time:"2h ago", icon:"↩", type:"return", badge:"tb-return", title:"Return dispute filed for #RNR-88304", detail:"Customer claims damaged pump · Packing video upload required by EOD" },
+    { time:"3h ago", icon:"⭐", type:"review", badge:"tb-review", title:"Review flagged: packaging issue", detail:"Rishi D. (Delhi) · 3★ · 'pump dispenser stopped working after a week'" },
+    { time:"4h ago", icon:"◁", type:"promo", badge:"tb-promo", title:"BOGO campaign hit usage cap", detail:"Buy 1 Get 1 Niacinamide Serum · 200 redemptions · Revenue lifted ₹8,400" }
+  ]},
+  { date: "Yesterday", items: [
+    { time:"Jun 25, 8:44pm", icon:"📦", type:"order", badge:"tb-order", title:"Bulk dispatch completed · 31 orders", detail:"Avg dispatch time 13.4h · All within SLA · Delhivery + Bluedart" },
+    { time:"Jun 25, 4:12pm", icon:"✦", type:"ai", badge:"tb-ai", title:"Akhtar skin match report available", detail:"2,841 monthly impressions · Acne-prone (72%), Pigmentation (58%), Dehydrated (49%)" },
+    { time:"Jun 25, 2:30pm", icon:"⚙", type:"system", badge:"tb-system", title:"Inventory alert: HA Toner low stock", detail:"LB-HAT-100 at 12 units · Below reorder threshold of 20 units" },
+    { time:"Jun 25, 11:00am", icon:"💳", type:"finance", badge:"tb-finance", title:"Ad wallet deduction: ₹1,200", detail:"Akhtar Boost impressions (67 clicks) · Balance remaining: ₹6,800" },
+    { time:"Jun 25, 9:18am", icon:"⭐", type:"review", badge:"tb-review", title:"2 new 5★ reviews received", detail:"Niacinamide Serum · Vitamin C SPF · Both verified purchases" },
+    { time:"Jun 25, 8:00am", icon:"⚙", type:"system", badge:"tb-system", title:"Daily performance digest ready", detail:"847 total orders · ₹2.4L MTD revenue · 94% dispatch rate · View full report" }
+  ]}
+];
+
+const mockNotifications = [
+  { icon:"🚨", title:"SLA breach imminent", time:"2m", body:"3 orders need dispatch — 1h 48m window remaining", action:"Print Labels", unread:true },
+  { icon:"↩", title:"Return dispute deadline", time:"4h", body:"Upload packing video for #RNR-88304 by end of day", action:"Upload Now", unread:true },
+  { icon:"⭐", title:"2 reviews need reply", time:"6h", body:"Pump complaint reviews from Priya M. and Rishi D.", action:"Reply Now", unread:true },
+  { icon:"📦", title:"HA Toner low stock", time:"1d", body:"Only 12 units left — below reorder threshold", action:"Restock", unread:false }
+];
+
+// ─── RENDER FUNCTIONS ───
+function renderMockData() {
+  // Inventory
+  const invBody = document.getElementById('inventory-body');
+  if (invBody) {
+    invBody.innerHTML = mockInventory.map(item => {
+      let pc = item.status==='Low'?'sp-low':item.status==='Out of stock'?'sp-out':'sp-good';
+      return `<tr><td style="font-weight:500">${item.name}</td><td style="color:var(--muted)">${item.sku}</td><td>${item.stock}</td><td><span class="stock-pill ${pc}">${item.status}</span></td><td style="color:var(--muted)">${item.hsn}</td></tr>`;
+    }).join('');
+  }
+  // Leakage
+  const leakChart = document.getElementById('leak-chart');
+  if (leakChart) {
+    leakChart.innerHTML = mockLeakage.chart.map((item, i) => {
+      const btn = item.dispute ? `<button class="btn btn-ghost" onclick="handleDispute(this,${i})" style="padding:2px 6px;font-size:9px;border-radius:4px;margin-left:6px;flex-shrink:0">Dispute</button>` : '';
+      return `<div class="leak-row"><div class="leak-label">${item.label}</div><div class="leak-track"><div class="leak-fill" style="width:${item.pct}%;background:${item.color}">${item.amount}</div></div><div class="leak-total">${item.amount}${btn}</div></div>`;
+    }).join('');
+  }
+  const leakSummary = document.getElementById('leak-summary');
+  if (leakSummary) {
+    leakSummary.innerHTML = mockLeakage.summary.map(item => `<div class="leak-stat"><div class="leak-stat-val" style="color:${item.color}">${item.val}</div><div class="leak-stat-lbl">${item.lbl}</div></div>`).join('');
+  }
+  renderOrders('all');
+  renderActivity('all');
+  renderAnalyticsChart();
+  renderNotifications();
+}
+
+// ─── ORDERS ───
+function renderOrders(filter) {
+  const body = document.getElementById('orders-table-body');
+  if (!body) return;
+  let orders = mockOrders;
+  if (filter === 'urgent') orders = orders.filter(o => o.sla === 'breach');
+  else if (filter === 'confirmed') orders = orders.filter(o => o.status === 'confirmed');
+  else if (filter === 'transit') orders = orders.filter(o => o.status === 'transit');
+  else if (filter === 'delivered') orders = orders.filter(o => o.status === 'delivered');
+  else if (filter === 'cod') orders = orders.filter(o => o.status === 'cod');
+
+  body.innerHTML = orders.map(o => {
+    let statusPill, slaHtml;
+    if(o.status==='confirmed') statusPill=`<span class="stock-pill sp-low">Confirmed</span>`;
+    else if(o.status==='transit') statusPill=`<span class="stock-pill sp-transit">In Transit</span>`;
+    else if(o.status==='delivered') statusPill=`<span class="stock-pill sp-good">Delivered</span>`;
+    else if(o.status==='cod') statusPill=`<span class="stock-pill sp-pending">Pending COD</span>`;
+    else if(o.status==='return') statusPill=`<span class="stock-pill sp-out">Return</span>`;
+    else statusPill=`<span class="stock-pill">${o.status}</span>`;
+
+    if(o.sla==='breach') slaHtml=`<div class="order-sla-breach">🔴 ${o.slaText}</div>`;
+    else if(o.sla==='warn') slaHtml=`<div class="order-sla-warn">⚠ ${o.slaText}</div>`;
+    else slaHtml=`<div class="order-sla-ok">✓ ${o.slaText}</div>`;
+
+    let actions = '';
+    if(o.sla==='breach') actions = `<button class="btn btn-danger btn-sm">Print Label</button>`;
+    else if(o.status==='transit') actions = `<button class="btn btn-ghost btn-sm">Track</button>`;
+    else if(o.status==='return') actions = `<button class="btn btn-amber btn-sm">Dispute</button>`;
+    else actions = `<button class="btn btn-ghost btn-sm">Details</button>`;
+
+    return `<tr>
+      <td><div class="order-id">#${o.id}</div><div class="order-id-sub">${o.date}</div></td>
+      <td><div class="order-customer">${o.customer}</div><div class="order-city">${o.city}</div></td>
+      <td><div class="order-prod-name">${o.product}</div><div class="order-prod-sku">${o.sku}</div></td>
+      <td><div class="order-amount">${o.amount}</div><div class="order-type">${o.type}</div></td>
+      <td>${statusPill}</td>
+      <td>${slaHtml}</td>
+      <td><div class="order-actions">${actions}</div></td>
+    </tr>`;
+  }).join('');
+}
+
+function setOrderFilter(filter, el) {
+  currentOrderFilter = filter;
+  document.querySelectorAll('#order-filter-tabs .ftab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  renderOrders(filter);
+}
+
+function filterOrders(query) {
+  const body = document.getElementById('orders-table-body');
+  if (!body) return;
+  const q = query.toLowerCase();
+  const filtered = mockOrders.filter(o =>
+    o.id.toLowerCase().includes(q) ||
+    o.customer.toLowerCase().includes(q) ||
+    o.product.toLowerCase().includes(q) ||
+    o.city.toLowerCase().includes(q)
+  );
+  body.innerHTML = filtered.map(o => {
+    let statusPill = `<span class="stock-pill">${o.status}</span>`;
+    if(o.status==='confirmed') statusPill=`<span class="stock-pill sp-low">Confirmed</span>`;
+    else if(o.status==='transit') statusPill=`<span class="stock-pill sp-transit">In Transit</span>`;
+    else if(o.status==='delivered') statusPill=`<span class="stock-pill sp-good">Delivered</span>`;
+    else if(o.status==='cod') statusPill=`<span class="stock-pill sp-pending">Pending COD</span>`;
+    else if(o.status==='return') statusPill=`<span class="stock-pill sp-out">Return</span>`;
+    const slaHtml = o.sla==='breach'?`<div class="order-sla-breach">🔴 ${o.slaText}</div>`:o.sla==='warn'?`<div class="order-sla-warn">⚠ ${o.slaText}</div>`:`<div class="order-sla-ok">✓ ${o.slaText}</div>`;
+    return `<tr><td><div class="order-id">#${o.id}</div><div class="order-id-sub">${o.date}</div></td><td><div class="order-customer">${o.customer}</div><div class="order-city">${o.city}</div></td><td><div class="order-prod-name">${o.product}</div><div class="order-prod-sku">${o.sku}</div></td><td><div class="order-amount">${o.amount}</div><div class="order-type">${o.type}</div></td><td>${statusPill}</td><td>${slaHtml}</td><td><button class="btn btn-ghost btn-sm">Details</button></td></tr>`;
+  }).join('');
+}
+
+// ─── SLA COUNTDOWN ───
+let slaSeconds = 6480;
+function updateTimer() {
+  const el = document.getElementById('sla-timer');
+  if (!el) return;
+  const h = Math.floor(slaSeconds/3600);
+  const m = Math.floor((slaSeconds%3600)/60);
+  const s = slaSeconds%60;
+  el.textContent = `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  if (slaSeconds > 0) slaSeconds--;
+}
+setInterval(updateTimer, 1000);
+
+// ─── ACTIVITY FEED ───
+function renderActivity(filter) {
+  const tl = document.getElementById('activity-timeline');
+  if (!tl) return;
+  tl.innerHTML = activityFeed.map(group => {
+    const items = filter === 'all' ? group.items : group.items.filter(i => i.type === filter);
+    if (!items.length) return '';
+    const itemsHtml = items.map(item => `
+      <div class="tl-item" data-type="${item.type}">
+        <div class="tl-dot-wrap">${item.icon}</div>
+        <div class="tl-body">
+          <div class="tl-title">${item.title}<span class="tl-badge ${item.badge}">${item.type}</span></div>
+          <div class="tl-meta">${item.detail}</div>
+          <div style="font-size:10px;color:var(--muted);margin-top:3px;opacity:.6">${item.time}</div>
+          ${item.expandable ? `<div class="tl-expand" onclick="this.style.display='none'">View affected orders →</div>` : ''}
+        </div>
+      </div>
+    `).join('');
+    return `<div class="tl-group"><div class="tl-date-label">${group.date}</div>${itemsHtml}</div>`;
+  }).join('');
+}
+
+function setFeedFilter(filter, el) {
+  currentFeedFilter = filter;
+  document.querySelectorAll('#feed-filter-pills .feed-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  renderActivity(filter);
+}
+
+function markAllRead() {
+  document.querySelectorAll('.notif-card.unread').forEach(c => c.classList.remove('unread'));
+  document.querySelector('.nbadge.nb-blue') && (document.querySelector('.nbadge.nb-blue').style.display = 'none');
+}
+
+function renderNotifications() {
+  const list = document.getElementById('notif-list');
+  if (!list) return;
+  list.innerHTML = mockNotifications.map(n => `
+    <div class="notif-card ${n.unread ? 'unread' : ''}">
+      <div class="notif-head">
+        <span class="notif-icon">${n.icon}</span>
+        <span class="notif-title">${n.title}</span>
+        <span class="notif-time">${n.time}</span>
+      </div>
+      <div class="notif-body">${n.body}</div>
+      <div class="notif-action">${n.action} →</div>
+    </div>
+  `).join('');
+}
+
+// ─── ANALYTICS CHART ───
+const revenueData = {
+  '7d':  [3800,4200,5100,3900,4800,5400,4620],
+  '30d': [18000,22000,19000,25000,21000,28000,24000,30000,26000,32000,28000,35000,31000,38000,34000,40000,36000,42000,38000,44000,40000,45000,42000,47000,43000,48000,44000,50000,46000,52000],
+  '90d': [62000,71000,78000,85000,79000,92000,88000,99000,94000,108000,102000,115000],
+  'ytd': [155000,178000,190000,210000,195000,240000]
+};
+const periodLabels = {'7d':'Last 7 days','30d':'Last 30 days','90d':'Last 90 days','ytd':'Year to date'};
+const chartLabels = {
+  '7d':  ['M','T','W','T','F','S','S'],
+  '30d': Array.from({length:30},(_,i)=>`${i+1}`).filter((_,i)=>i%5===0||i===29),
+  '90d': ['Apr W1','Apr W2','Apr W3','Apr W4','May W1','May W2','May W3','May W4','Jun W1','Jun W2','Jun W3','Jun W4'],
+  'ytd': ['Jan','Feb','Mar','Apr','May','Jun']
+};
+
+function renderAnalyticsChart(period='30d') {
+  const wrap = document.getElementById('analytics-revenue-chart');
+  if (!wrap) return;
+  const data = revenueData[period] || revenueData['30d'];
+  const labels = period === '30d' ? Array.from({length:30},(_,i)=>i%5===0?`${i+1}`:'') : chartLabels[period];
+  const max = Math.max(...data);
+  wrap.innerHTML = data.map((val, i) => {
+    const h = Math.round((val/max)*100);
+    const label = labels[i] || '';
+    const isPeak = val === max;
+    return `<div class="big-bar-col" style="flex:1">
+      <div class="big-bar-track" style="height:100%">
+        <div class="big-bar-seg" style="height:${h}%;background:${isPeak?'var(--accent)':'rgba(107,184,168,0.5)'};border-radius:3px 3px 0 0;opacity:${isPeak?1:.8}"></div>
+      </div>
+      <div class="big-bar-label">${label}</div>
+    </div>`;
+  }).join('');
+}
+
+function setPeriod(period, el) {
+  document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  const lbl = document.getElementById('period-label');
+  if (lbl) lbl.textContent = periodLabels[period];
+  renderAnalyticsChart(period);
+}
+
+function handleDispute(btn, index) {
+  btn.innerText = 'Under Review';
+  btn.style.background = 'rgba(212,168,87,.1)';
+  btn.style.borderColor = 'var(--amber)';
+  btn.style.color = 'var(--amber)';
+  btn.style.pointerEvents = 'none';
+}
+
+document.addEventListener('DOMContentLoaded', renderMockData);
+</script>
+</body>
+</html>
